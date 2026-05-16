@@ -24,6 +24,15 @@ final class GameCoordinator {
         return result.clearedCells
     }
 
+    func tick(deltaMs: Int) {
+        guard session.phase == .playing else { return }
+        let next = max(0, session.remainingMs - deltaMs)
+        session.remainingMs = next
+        if next == 0 {
+            end()
+        }
+    }
+
     func end() {
         session.phase = .ended
     }
