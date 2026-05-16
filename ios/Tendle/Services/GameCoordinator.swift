@@ -33,6 +33,9 @@ final class GameCoordinator {
         guard let result = BoardEngine.clear(selection, on: session.board) else { return 0 }
         session.board = result.board
         session.playerScore += result.clearedCells
+        if result.clearedCells > 0 {
+            SoundService.shared.play(.clear)
+        }
         return result.clearedCells
     }
 
