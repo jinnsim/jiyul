@@ -1,6 +1,6 @@
 # Tendle — Design Spec
 
-**Status:** Draft (awaiting user review)
+**Status:** Draft v2 (post Codex review — awaiting user approval)
 **Date:** 2026-05-17
 **Owner:** Jung Soon Shin (@jinnsim)
 **Target Phase:** MVP (Phase 1)
@@ -11,60 +11,83 @@
 
 Tendle is a universal iOS (iPhone/iPad) daily puzzle game based on the classic
 Korean "사과게임" (Fruit Box / Apple Game). Players drag-select rectangular
-regions of a 17×10 grid of digits 1–9; if the selected cells sum to exactly 10,
-they clear. Two-minute round, score = cells cleared.
+regions of a 17×10 grid of digits 1–9; if the digits in the rectangle sum to
+exactly 10, they clear. Two-minute round, score = cells cleared.
 
-**Twist:** every board ships with a **"오늘의 봇 점수"** — an in-app heuristic
-solver runs an anytime beam search in the background while the player plays and
-publishes a benchmark score by the time the round ends. The player's score is
-contextualized against the bot (e.g. "당신 87 / 봇 121"), turning a solitary
-casual game into a daily benchmark exercise without any backend.
+**Twist:** every board ships with a **"오늘의 봇 점수"** — an in-app
+deterministic beam-search solver runs in the background while the player plays
+and publishes a fixed-profile benchmark score by the time the round ends. The
+player's score is contextualized against the bot ("당신 87 / 봇 121"), turning
+solo play into a daily benchmark without any backend.
 
-**Why this design fits the indie-portfolio bar of kpop-heardle:**
-- Zero backend. Boards generated client-side from a deterministic date seed.
-- Zero operational ask. No GitHub Actions, no CDN mirror, no data refresh.
-- Same SwiftUI + SwiftData stack, same iOS 17.0 minimum.
-- Offline-100%: the only dynamic input is the current date.
+**Operational posture** (matches kpop-heardle's indie-portfolio bar — see §15):
+- No scheduled data jobs, no CDN mirror, no live backend.
+- CI-only GitHub Actions (build + unit tests on push).
+- Boards generated client-side from a deterministic date seed.
+- 100% offline at runtime — the only input is the device clock.
 
 ---
 
 ## 2. Game Rules
 
-Strict classic rules — the entire twist is in the benchmark, not in the
+Strict classic rules. The differentiation lives in the benchmark, not in the
 mechanics.
 
 - **Grid:** 17 columns × 10 rows of digits 1–9.
-- **Distribution:** deterministic per seed; uniform sampling 1–9 (matches
-  the canonical Apple Game distribution).
-- **Selection:** player drags an axis-aligned rectangle covering one or more
-  cells. Empty (already-cleared) cells inside the rectangle are ignored.
-- **Clear rule:** rectangle clears if and only if the sum of remaining digits
-  inside it equals exactly 10.
-- **Score:** +1 per cell cleared.
+- **Distribution:** each cell is generated independently from {1,…,9} using a
+  deterministic seeded RNG with rejection sampling (no modulo bias). Practically
+  uniform; canonical-style for Fruit Box variants.
+- **Selection:** player drags an axis-aligned rectangle over one or more cells.
+  Already-cleared cells inside the rectangle contribute 0 to the sum and cannot
+  be re-cleared.
+- **Commit:** selection is committed only on touch-up. While dragging, the
+  current rectangle and live sum are visualised; the action takes effect only
+  when the finger lifts.
+- **Clear rule:** rectangle clears iff the sum of remaining (non-cleared)
+  digits inside it equals exactly 10.
+- **Score:** +1 per cell cleared (cells, not digit values).
 - **Time limit:** 120 seconds, hard.
-- **End:** time expires. (No "no moves possible" detection in MVP — board can
-  technically deadlock but the timer always ends the round.)
-- **No penalties** for invalid selections.
+- **End:** time expires. No "no moves possible" auto-end in MVP.
+- **Invalid selection:** brief shake + light haptic, no score penalty.
 
 ---
 
 ## 3. Modes
 
+### 3.1 MVP scope (Phase 1)
+
 | Mode | Source of board | Recorded? | Bot score? |
 |------|-----------------|-----------|------------|
-| **오늘의 보드** (Daily) | `seed = hash("YYYY-MM-DD\|daily")` (KST date) | First completion per day → stats | Yes |
-| **자유연습** (Practice) | `seed = user-entered 6-digit code` OR random | Never | Yes (computed per session) |
+| **오늘의 보드** (Daily) | `seed = hash("YYYY-MM-DD\|daily")`, KST date | First completed attempt of the day → stats | Yes (deterministic profile) |
 | **통계** (Stats) | n/a | View only | n/a |
 
-**Daily reset:** KST (UTC+9) midnight. Same board worldwide at the same wall-clock
-moment. The app derives "today" from `Date()` interpreted in `Asia/Seoul` —
-device timezone is irrelevant to which board is "today's".
+Practice mode (seed entry, ad-hoc replay), seed sharing, and iPad-specific
+split view are explicitly **deferred to Phase 1.5** (see §14).
 
-**Daily re-play:** allowed for fun. Only the first attempt of the day counts
-toward stats; subsequent attempts show "이미 기록됨" badge.
+### 3.2 Daily reset & timezone
 
-**Practice seed sharing:** "이 보드 같이 풀자" share sheet outputs a deep link
-or a 6-digit seed code the friend can paste in.
+- "Today" is derived from `Date()` interpreted in `Asia/Seoul` (UTC+9).
+  Device timezone does not affect which board is "today's".
+- The same board appears worldwide at the same wall-clock instant.
+
+### 3.3 Attempt lifecycle
+
+A daily *attempt* has the following SwiftData fields (see §8): `startedAtKST`,
+`endedAtKST`, `dateKSTAtStart`, `outcome ∈ {completed, abandoned}`, plus score
+and bot data.
+
+- An attempt **belongs to the date it was started on**, even if it finishes
+  after midnight KST. The new day's board does not become available until the
+  previous attempt ends.
+- **Abandoned:** background → terminate / kill / launch fresh after >5 min →
+  the attempt is marked abandoned and does **not** count as the day's first
+  recorded attempt. The player can re-start (will be that day's first record).
+- **Backgrounded briefly (<5 min):** timer pauses on backgrounding; resumes
+  with the remaining time intact. (Apple HIG aligns with this for casual
+  puzzles.)
+- **First-record rule:** only the first attempt with `outcome == completed`
+  per `dateKSTAtStart` contributes to stats / share. Re-plays show "이미 기록됨"
+  and let the player replay for fun; subsequent attempts are not persisted.
 
 ---
 
@@ -72,119 +95,158 @@ or a 6-digit seed code the friend can paste in.
 
 ### 4.1 Stack
 
-- **UI:** SwiftUI, iOS 17.0+, universal (iPhone + iPad with adaptive layout)
-- **Persistence:** SwiftData (game records, stats, settings)
-- **Audio:** AVFoundation system sounds for tap / clear / game-over only
-  (no music, no iTunes API — this is not a music game)
-- **Build:** xcodegen + Xcode 15.2+, same conventions as kpop-heardle
-- **Backend:** none
-- **CI:** GitHub Actions for build verification only (no data jobs)
+- **UI:** SwiftUI, iOS 17.0+, universal (iPhone + iPad)
+- **Persistence:** SwiftData
+- **Audio:** AVFoundation system sounds (`tap.caf`, `clear.caf`, `gameover.caf`)
+- **Build:** xcodegen + Xcode 15.2+
+- **Backend / scheduled jobs:** none
+- **CI:** GitHub Actions for build + unit tests only
 
 ### 4.2 Component Boundaries
 
 ```
 ios/Tendle/
   App/
-    TendleApp.swift               @main entry, scene + root split
+    TendleApp.swift               @main entry, single-window scene
   Models/
     Board.swift                   17×10 grid, immutable snapshot
     Cell.swift                    digit + cleared flag
     Selection.swift               drag rectangle (col/row range)
-    GameSession.swift             mutable state during a round
-    DailyRecord.swift             SwiftData @Model — one per day
+    GameSession.swift             round state (mutable, owned by Coordinator)
+    DailyRecord.swift             SwiftData @Model
+    SolverCache.swift             SwiftData @Model
     Stats.swift                   computed aggregates
-    SolverProgress.swift          { bestScore, elapsedMs, isFinal }
+    SolverProgress.swift          { bestScore, nodesExpanded, isFinal }
   Services/
-    BoardGenerator.swift          seed → Board (SeedableRNG, splitmix64)
-    BoardEngine.swift             pure functions — validate selection,
-                                  sum, apply clear, board diff
-    GameCoordinator.swift         timer + score + lifecycle.
-                                  NOT @MainActor — view bodies call sync.
-    Solver.swift                  anytime beam search.
-                                  Task.detached(priority: .background).
-                                  Publishes SolverProgress via AsyncStream.
-    StatsStore.swift              SwiftData wrapper — query/aggregate
-    ShareCardRenderer.swift       text + emoji-grid share payload
+    SeededRNG.swift               SplitMix64, deterministic
+    BoardGenerator.swift          seedInput → Board (rejection sampling)
+    BoardEngine.swift             pure functions — selection validity,
+                                  rectangle sum, clear application
+    GameCoordinator.swift         round lifecycle. See §4.4 on actor policy.
+    Solver.swift                  deterministic beam search, node-budget
+                                  bounded. Task.detached background priority.
+    StatsStore.swift              SwiftData wrapper
+    ShareCardRenderer.swift       text + emoji ratio bar
     SoundService.swift            preloaded AVAudioPlayer pool
   Views/
-    RootView.swift                iPhone — NavigationStack
-    RootSplitView.swift           iPad — NavigationSplitView sidebar/detail
-    HomeView.swift                "오늘의 보드" CTA + 자유연습 + 통계 진입
+    RootView.swift                NavigationStack root (iPhone & iPad same)
+    HomeView.swift                Daily CTA + Stats entry
     GameView.swift                BoardView + HUD + drag overlay
     BoardView.swift               17×10 grid render
-    SelectionOverlay.swift        drag rectangle + live sum indicator
-    ResultView.swift              점수 + 봇 비교 + 공유 + 다시 도전
-    StatsView.swift               누적/연속/최고/봇 승률
-    PracticeView.swift            시드 입력 + 랜덤 시작
-    SettingsView.swift            언어, 사운드, 데이터 초기화
+    SelectionOverlay.swift        live drag rectangle + sum indicator
+    ResultView.swift              score + bot + share + replay
+    StatsView.swift               aggregates + recent history
+    SettingsView.swift            sound on/off, data reset, about
   Resources/
-    Assets.xcassets/              (Codex-generated app icon + imagery)
-    Sounds/                       tap.caf, clear.caf, gameover.caf
-    Localizable.xcstrings         ko, en
+    Assets.xcassets/              Codex-generated app icon + imagery
+    Sounds/                       tap/clear/gameover (royalty-free)
+    Localizable.xcstrings         ko, en (system locale, no in-app picker)
 ```
 
 ### 4.3 Dependency Direction
 
-Strictly one-way: `View → Service → Model`. Models are pure value types.
-Services are class/actor singletons injected via `@Environment` where possible.
-`BoardEngine` is a free-function namespace (`enum BoardEngine { static func … }`)
-so it can be tested with no setup.
+Strictly `View → Service → Model`. `BoardEngine` is a free-function namespace
+(`enum BoardEngine { static func ... }`) so it is trivially testable.
 
-### 4.4 Threading
+### 4.4 Actor / Threading Policy
 
-- `GameCoordinator` runs on the main actor for UI binding but mutates session
-  state synchronously (matching kpop-heardle's deliberate non-`@MainActor`
-  pattern on the data-only paths).
-- `Solver` runs in a `Task.detached(priority: .background)`. It publishes
-  `SolverProgress` updates via `AsyncStream<SolverProgress>` that
-  `GameCoordinator` consumes and republishes to the UI. The solver task is
-  bound to the game session — cancellation on session teardown is mandatory.
-- `BoardEngine` is purely synchronous and thread-safe.
+- `GameCoordinator` is `@Observable`, **not** annotated `@MainActor`.
+  - UI-mutating entry points (start round, commit selection, end round) are
+    invoked from `MainActor` view bodies.
+  - Pure data helpers (e.g. timer tick handlers, score recompute) stay sync /
+    nonisolated, allowing SwiftUI view bodies to read state without context
+    hops. This mirrors the kpop-heardle precedent and the reason is identical:
+    avoid spurious `await` requirements in casual view-body reads.
+- `Solver` is invoked via `Task.detached(priority: .background)`. It publishes
+  `SolverProgress` via an `AsyncStream<SolverProgress>` that `GameCoordinator`
+  consumes and republishes to the UI on `MainActor`.
+- The solver task is bound to the game session: session teardown cancels it.
+- `BoardEngine` and `BoardGenerator` are synchronous and thread-safe (no
+  shared state).
 
 ---
 
 ## 5. Solver Design
 
-### 5.1 Algorithm: Anytime Beam Search
+### 5.1 Algorithm: Deterministic Beam Search
 
-- Maintain a beam of width `W` (default 128 on A14+, 64 on older).
+- Beam of fixed width `W` per **solver profile** (see §5.2).
 - At each step, expand every state in the beam: enumerate all rectangles whose
-  current sum equals 10, score each successor state, keep top-`W`.
+  current sum equals 10, score each successor, keep top-`W`.
 - Evaluation function: `realized_score + α · potential(remaining_board)`,
-  where `potential` counts the number of pair/triple combinations that can
+  where `potential` is the count of pair/triple/quad combinations that can
   still sum to 10 in the remaining board (cheap O(rows · cols) estimate).
-  The weight `α` is tuned during implementation against a held-out set of
-  seeds; persisted as part of `solverVersion`.
-- Track `currentBest: Int` (highest realized score seen across all expanded
-  states). Publish on every improvement.
-- Termination: beam empty, or wall-clock budget reached, or task cancelled.
+- `α` is fixed per `solverVersion`; never mutated at runtime.
+- Tie-break: stable sort by `(score desc, lex(selectionOrder) asc)`. No
+  randomness anywhere in the solver.
+- Track `bestRealizedScore`; publish on every improvement.
+- Termination: beam empty, OR `expandedStates >= maxExpandedStates`, OR task
+  cancelled.
 
-### 5.2 Time Budget
+### 5.2 Solver Profile (deterministic, device-independent)
 
-- Started: game start (player taps "시작").
-- Soft target: 30 seconds — usually converges well before this.
-- Hard cancel: game end (whichever comes first).
-- Result available: by the time `ResultView` appears.
-- Edge case (player finishes in <10s): keep the solver running briefly on
-  `ResultView` with a small "봇 계산 중…" placeholder; once final, swap in.
+Profile = the complete set of parameters that determine output:
 
-### 5.3 Why beam search, not exact?
+```
+solverProfile = "mvp-v1"
+  beamWidth          = 64
+  maxExpandedStates  = 200_000
+  alpha              = 0.10           # tuned per §5.6
+  scoringHash        = sha1(serializedScoringSpec)   // see §5.3
+  rngSeedForTies     = 0              // not used (deterministic tie-break)
+  solverVersion      = 1
+```
 
-Exact solution is intractable in general (state space explodes with rectangle
-choices). Beam search produces a strong, *deterministic*, *cancellable*
-benchmark. We never claim "이론치" — UI copy is "봇 점수" / "도전 점수".
+**Same profile + same board ⇒ identical bot score on every device.** Wall-clock
+budget is **not** part of the profile. A faster device finishes earlier; the
+score is the same.
 
-### 5.4 Determinism
+### 5.3 Scoring spec serialization
 
-Given identical (seed, beam width, scoring function, time budget), the solver
-produces identical output. Important so: (a) two players on similar devices see
-the same bot number; (b) bug reports reproduce.
+`scoringHash` is derived from a stable serialization of the scoring function's
+exact code path (constants + algorithm version). Bump `solverVersion` whenever
+the hash changes, which invalidates the solver cache (§5.5).
+
+### 5.4 UI / Determinism Contract
+
+- During the round, UI shows `progress.bestRealizedScore` as a soft, growing
+  indicator. This number is **non-decreasing**.
+- The number stored in `DailyRecord.botScore` is **always the deterministic
+  final** (when `expandedStates` reaches `maxExpandedStates` or beam empties).
+- If the deterministic final has not yet been reached by `ResultView` time,
+  the record is saved with `botStatus = .pending` and the bot UI shows
+  "봇 계산 중…". When the solver settles, `botStatus → .final` and the UI
+  updates. See §7.3 for behavior.
 
 ### 5.5 Caching
 
-`SolverResult { seed, botScore, beamWidth, version, computedAtMs }` cached in
-SwiftData. On revisit of a known seed, show cached value instantly while
-optionally re-running if `version` bumped.
+```swift
+@Model final class SolverCache {
+  @Attribute(.unique) var cacheKey: String   // "<seedInputHash>|<solverProfile>"
+  var botScore: Int
+  var solverProfile: String
+  var solverVersion: Int
+  var computedAt: Date
+}
+```
+
+Cache hit ⇒ instant final value, no recomputation. `solverVersion` change
+invalidates: next computation overwrites the entry.
+
+### 5.6 Solver Spike — Exit Criteria (gates implementation)
+
+Before solver code lands in main, a standalone spike must pass:
+
+- Build a Swift package `SolverSpike` outside the app target.
+- Generate 100 random seeds, run solver-mvp-v1 on each.
+- **Gate 1 (correctness):** on 10 hand-crafted small boards with known optima,
+  solver finds ≥ 90% of optimal.
+- **Gate 2 (determinism):** rerun on the same seeds, **100%** identical scores
+  bit-for-bit, on iPhone 12 sim, iPhone 15 sim, and Mac.
+- **Gate 3 (performance):** on iPhone 12 simulator (Apple Silicon Mac host),
+  p95 wall-clock < 30 s per board.
+- If any gate fails, profile parameters are adjusted and `solverVersion`
+  remains 1 (this is pre-ship tuning, not a deployed change).
 
 ---
 
@@ -193,142 +255,170 @@ optionally re-running if `version` bumped.
 ### 6.1 Seeding
 
 ```
-seed_input = "<YYYY-MM-DD KST>|daily"        # daily mode
-seed_input = "<6-digit code>|practice"        # shared practice
-seed_input = "<UUID>|practice"                # ad-hoc practice
-seed_64    = SHA256(seed_input).prefix(8) as UInt64
-rng        = SplitMix64(state: seed_64)
+seedInput   = "<YYYY-MM-DD KST>|daily"          # daily mode
+seed64      = SHA256(seedInput).prefix(8) as UInt64
+rng         = SplitMix64(state: seed64)
 ```
 
-Each of the 170 cells: `rng.next() % 9 + 1`.
+### 6.2 Cell sampling (rejection, no modulo bias)
 
-### 6.2 Why not "guaranteed solvable above N"
+```
+func nextDigit(_ rng: inout SplitMix64) -> Int {
+  // 9 buckets in [0, ⌊2^64 / 9⌋ · 9); reject anything above
+  let bound = (UInt64.max / 9) * 9
+  var r: UInt64
+  repeat { r = rng.next() } while r >= bound
+  return Int(r % 9) + 1
+}
+```
 
-We do not pre-filter boards for solvability quality. Uniform random is the
-classic distribution and produces playable boards. Stats — including the bot
-score — naturally communicate board difficulty.
+Each of the 170 cells uses one call. Deterministic and bias-free.
 
 ---
 
 ## 7. Screens (MVP)
 
 ### 7.1 HomeView
-- Title + date + streak chip
-- Primary CTA: **"오늘의 보드"** (badge if already played today)
-- Secondary: **자유연습**, **통계**
-- iPad: sidebar variant in `RootSplitView`
+
+States visible to the user:
+
+| State | Trigger | UI |
+|-------|---------|----|
+| `idle.notPlayedToday` | first launch of the day | "오늘의 보드" primary CTA |
+| `played.botCached` | first attempt completed, bot final stored | CTA shows score + 봇 비교 badge; "다시 도전" secondary |
+| `played.botPending` | first attempt completed, bot still computing | Same as above with subtle "봇 계산 중…" |
+
+iPad: same layout, scaled up. No sidebar / no split view in MVP.
 
 ### 7.2 GameView
-- HUD: 점수, 남은 시간, 봇 진행 표시 (subtle — "봇 계산 중 · 87")
-- BoardView: 17×10 grid, generous tap targets, drag overlay shows live sum
-  (red if >10, gray if <10, green if =10)
-- Drag commit on touch-up: green → clear with animation + sound
+
+- HUD: 점수, 남은 시간, 봇 진행 표시 ("봇 …")
+- BoardView: fixed-aspect surface, **not inside a ScrollView**. Drag uses
+  `DragGesture(minimumDistance: 0, coordinateSpace: .named("board"))`. Hit
+  testing is done in board-space to avoid pollution from sidebar / system
+  edge swipes.
+- SelectionOverlay: live rectangle + sum indicator
+  (red `>10`, gray `<10`, green `=10`).
+- Commit on touch-up only (§2).
 
 ### 7.3 ResultView
-- 큰 점수 + 봇 점수 side-by-side
-- 승/무/패 마이크로카피 (e.g. "봇을 이겼습니다!")
-- 액션: **다시 도전** (오늘 추가 시도, stats 미반영), **공유**, **홈으로**
-- Share button visible only for Daily mode. Practice mode shows the same
-  result layout but without the share action and without a date in the header.
-- Share payload: text + emoji grid (see §9)
+
+- Big player score + bot score side-by-side.
+- Win/lose/tie microcopy ("봇을 이겼습니다!" etc.).
+- Bot status states:
+  - `.final` → show number.
+  - `.pending` → show "봇 계산 중…" pulse; live-update when ready.
+  - `.failed` → "봇 결과 없음" (shouldn't happen; logged).
+- Actions: **다시 도전** (today extra attempt, stats unchanged), **공유**
+  (Daily only), **홈으로**.
+- Replay path: rebuilds a fresh `GameSession` with the same board; no record
+  is written.
 
 ### 7.4 StatsView
+
 - 누적 플레이 수, 연속일, 평균 점수, 최고 점수, 봇 승률
-- 최근 30일 점수 그래프 (스파크라인 정도, kpop-heardle 결)
+- 최근 30일 점수 sparkline.
 
-### 7.5 PracticeView
-- 시드 입력 필드 (6자리) + 랜덤 시작 버튼
-- 친구가 보낸 코드 paste 지원
+### 7.5 SettingsView
 
-### 7.6 SettingsView
-- 언어 (Korean / English)
-- 사운드 on/off
-- 데이터 초기화 (확인 dialog)
-- About / 버전
+- Sound on/off
+- Data reset (with confirmation dialog)
+- About / version
+- (No in-app language picker — system locale only in MVP.)
 
-### 7.7 iPad Layout
-- `NavigationSplitView`: sidebar = HomeView 항목, detail = 선택 화면
-- GameView on iPad: 보드 중앙, 우측에 통계/봇 진행 상시 노출 사이드 패널
+### 7.6 iPad layout
+
+- Same `RootView` (NavigationStack) as iPhone, scaled.
+- BoardView max width clamped (`min(geometry.width, 720pt)`) to keep cells
+  finger-friendly. Cell minimum render size: 36×36 pt.
+- No side panel in MVP.
+- Both portrait and landscape supported; layout reflows around board's fixed
+  aspect ratio.
 
 ---
 
 ## 8. Data & Persistence
 
-### 8.1 SwiftData Models
-
 ```swift
+enum BotStatus: String, Codable {
+  case pending, final, failed
+}
+
 @Model final class DailyRecord {
-  @Attribute(.unique) var dateKST: String  // "2026-05-17"
-  var seed: UInt64
+  @Attribute(.unique) var dateKST: String        // "2026-05-17"
+  var seedInputHash: String                       // hex of SHA256(seedInput)
+  var startedAtKST: Date
+  var endedAtKST: Date
+  var dateKSTAtStart: String                      // == dateKST normally
   var playerScore: Int
-  var botScore: Int
   var durationMs: Int
-  var completedAt: Date
+  var botStatusRaw: String                        // BotStatus
+  var botScore: Int?                              // nil while pending
+  var botFinalizedAt: Date?
+  var solverProfile: String
+  var outcome: String                             // "completed" | "abandoned"
 }
 
 @Model final class SolverCache {
-  @Attribute(.unique) var seed: UInt64
+  @Attribute(.unique) var cacheKey: String        // see §5.5
   var botScore: Int
+  var solverProfile: String
   var solverVersion: Int
   var computedAt: Date
 }
 
 @Model final class Settings {
-  var locale: String          // "ko" | "en" | "system"
   var soundEnabled: Bool
   var hapticsEnabled: Bool
 }
 ```
 
-### 8.2 Migration
-
-None for MVP. Schema versioning hook reserved (`solverVersion` lets us
-invalidate cached bot scores when the solver changes).
+Migration: none for MVP. `solverVersion` lets us invalidate cached bot scores
+when the solver changes.
 
 ---
 
 ## 9. Share Format
 
-Wordle-style, plain text. Example:
+Wordle-style, plain text. **Emoji ratio bar** (not a board snapshot):
 
 ```
 Tendle 2026-05-17
-🟩 87 · 🤖 121
-░░░░░░░░░░░░░░░░░ 72%
-tendle.app/d/2026-05-17
+🟩 87 · 🤖 121 (72%)
+███████████████░░░░░
 ```
 
-- Emoji bar shows player/bot ratio
-- Last line is an optional landing URL (Phase 2 — for MVP, omit URL since
-  there is no website)
+- Bar = player/bot ratio, capped at 100%.
+- No URL in MVP (no landing site exists). Added in Phase 2.
 
 ---
 
 ## 10. Localization (MVP)
 
-- **Korean** (primary), **English**
-- Single `Localizable.xcstrings` file (Xcode 15 catalog format)
-- Numbers: locale-aware formatting via `Formatter.localizedString(from:number:style:)`
-- Dates: explicit `Asia/Seoul` for daily, locale display for everything else
-- Future locales added incrementally (kpop-heardle reached 13 over time)
+- Korean (primary), English. System locale only — no in-app picker.
+- Single `Localizable.xcstrings`.
+- Numbers via `Formatter`; dates via explicit `Asia/Seoul` for daily,
+  user-locale for everything else.
 
 ---
 
 ## 11. Imagery & Audio Assets
 
 ### 11.1 Imagery — Codex workflow
-- App icon (1024×1024), launch screen, empty-state illustrations are generated
-  via OpenAI Codex / ChatGPT image generation, driven by documented prompts.
-- Prompts checked into `docs/asset-prompts.md` for reproducibility (input
-  prompt + output filename + revision notes).
+
+- App icon (1024×1024), launch screen, empty-state illustrations generated
+  via OpenAI Codex / ChatGPT image generation.
+- Prompts checked into `docs/asset-prompts.md` (input prompt + output filename
+  + revision notes) so anyone can re-generate.
 - Generated PNGs placed into `Assets.xcassets` manually; no automation in MVP.
 - Style direction: minimal, two-tone, soft rounded squares — visual identity
   follows the user's "중독성 · 아이디어 우선, 화려한 그래픽 지양" brief.
 
 ### 11.2 Audio
-- Three short `.caf` clips: `tap.caf`, `clear.caf`, `gameover.caf`
-- Royalty-free, embedded in app bundle
-- Toggleable in Settings
+
+- Three short `.caf` clips: `tap.caf`, `clear.caf`, `gameover.caf`.
+- Royalty-free, bundled in app.
+- Toggleable in Settings.
 
 ---
 
@@ -336,11 +426,12 @@ tendle.app/d/2026-05-17
 
 | Layer | Approach |
 |-------|----------|
-| `BoardEngine` | XCTest unit tests — pure functions, exhaustive selection-validity cases |
-| `BoardGenerator` | XCTest — determinism (same seed → same board), distribution sanity |
-| `Solver` | XCTest — small hand-crafted boards with known optima; non-regression test |
-| `GameCoordinator` | XCTest with fake timer — score accounting, end-of-round transitions |
+| `BoardEngine` | XCTest — pure functions, exhaustive selection-validity cases |
+| `BoardGenerator` | XCTest — determinism (same seed → same board), rejection-sampling stat sanity |
+| `Solver` | XCTest — small known-optimum boards; determinism across reruns |
+| `GameCoordinator` | XCTest with fake clock — score, end-of-round, attempt lifecycle |
 | `StatsStore` | XCTest with in-memory `ModelContainer` |
+| Solver spike gates | §5.6 — separate spike package, gating ship |
 | Views | Manual QA in iOS Simulator (iPhone 15, iPad Pro 11") |
 
 CI: GitHub Actions runs `xcodebuild test` on push.
@@ -349,40 +440,58 @@ CI: GitHub Actions runs `xcodebuild test` on push.
 
 ## 13. Non-Functional
 
-- **Performance:** 60 fps board interactions on iPhone 12+. Solver throttled to
-  not starve the main thread.
-- **Battery:** solver capped at 30s/round; uses `.background` priority.
+- **Performance:** 60 fps board interactions on iPhone 12+. Solver runs at
+  `.background` priority so it cannot starve the main thread.
+- **Battery:** node-budget bound (§5.2) caps solver CPU; no wall-clock chase.
 - **Offline:** 100% — no network calls anywhere in MVP.
 - **Accessibility:** VoiceOver labels on cells ("3, 5열 8행"), Dynamic Type
-  support on text, reduce-motion respected for clear animations.
+  support on text labels, reduce-motion respects clear animations.
 - **Privacy:** zero data leaves device. No analytics, no crash reporter in MVP.
 
 ---
 
-## 14. Out of Scope (Deferred)
+## 14. Out of Scope
 
-| Item | Phase | Reason |
-|------|-------|--------|
-| GameKit leaderboards | 2 | Adds Apple-side ops; nice-to-have, not core |
-| Push notifications (daily reminder) | 2 | Requires APNs config; deferable |
-| Additional locales (ja, zh, …) | 2 | Add as adoption justifies |
-| Themes / skins | 2 | Visual polish, not core |
-| Deadlock detection (auto end) | 2 | Timer always ends round anyway |
-| Multi-difficulty boards | 2 | Validate single-difficulty resonance first |
-| Web companion | 3 | Native iOS is the defined target |
-| Backend / cross-device sync | 3 | Explicitly rejected for MVP scope |
+### Phase 1.5 (post-MVP polish)
+
+- **Practice mode** with 6-digit seed entry and "이 보드 같이 풀자" share
+- In-app language picker
+- Haptic intensity slider
+- iPad split view + side panel
+- Sound asset polish (custom-designed clips)
+
+### Phase 2
+
+- GameKit leaderboards
+- Daily push notification reminder
+- Additional locales (ja, zh, …)
+- Themes / skins
+- Universal Links / deep-link seed sharing
+- Web companion / landing site
+
+### Phase 3
+
+- Backend / cross-device sync
+- Multi-difficulty boards
+- Deadlock auto-end detection
 
 ---
 
 ## 15. Hard Constraints (CLAUDE.md material)
 
-- iOS deployment target: **17.0** (SwiftData requirement)
-- Daily reset zone: **Asia/Seoul** (UTC+9). Not user-local.
-- Solver: **anytime, cancellable, deterministic**. Never block UI.
-- `GameCoordinator`: NOT `@MainActor` for data paths (matches kpop-heardle).
-- No network calls in MVP. If added, must be optional.
-- Imagery assets: generated via Codex workflow, prompts in
+- **iOS deployment target:** 17.0 (SwiftData requirement).
+- **Daily reset zone:** `Asia/Seoul` (UTC+9). Not user-local.
+- **Solver:** deterministic, node-budget-bounded, cancellable. Same profile +
+  same board ⇒ identical bot score on every device. Never block UI.
+- **GameCoordinator:** `@Observable`, **not** `@MainActor`. Pure data helpers
+  remain sync/nonisolated. UI-mutating entry points are called from
+  `MainActor` view bodies. (Same precedent and rationale as kpop-heardle.)
+- **Networking:** none in MVP. If added later, must be optional and
+  non-blocking.
+- **Imagery assets:** generated via Codex workflow. Prompts live in
   `docs/asset-prompts.md`.
+- **Operational posture:** no scheduled jobs / no live backend / no CDN
+  mirror. CI-only GitHub Actions allowed (build + unit tests).
 
 ---
 
@@ -398,6 +507,7 @@ CI: GitHub Actions runs `xcodebuild test` on push.
     project.yml                # xcodegen
     Tendle/                    # SwiftUI sources (per §4.2)
     TendleTests/
+    SolverSpike/               # standalone spike package (§5.6)
   docs/
     superpowers/specs/
       2026-05-17-tendle-design.md   ← this file
@@ -412,6 +522,6 @@ CI: GitHub Actions runs `xcodebuild test` on push.
 
 ## 17. Open Questions (none blocking implementation)
 
-- Final app name (Tendle is placeholder — App Store listing TBD)
-- Whether to expose haptic intensity slider (default on/off only for MVP)
-- iPad landscape vs portrait first-class — MVP supports both, no special tuning
+- Final App Store listing name (Tendle is placeholder).
+- `α` final value pending §5.6 spike completion.
+- Whether to expose haptic intensity slider — currently Phase 1.5.
