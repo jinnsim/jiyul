@@ -3,6 +3,7 @@ import SwiftUI
 struct ResultView: View {
     let session: GameSession
     let onHome: () -> Void
+    var encouragementMoment: EncouragementMoment? = nil
 
     var body: some View {
         VStack(spacing: 32) {
@@ -11,11 +12,15 @@ struct ResultView: View {
                 column(label: "당신", value: "\(session.playerScore)", color: .accentColor)
                 column(label: "봇", value: botText, color: .secondary)
             }
-            Text(microcopy)
-                .font(.title3)
-                .multilineTextAlignment(.center)
-                .foregroundStyle(.secondary)
-                .padding(.horizontal)
+            if let moment = encouragementMoment {
+                EncouragementMomentView(moment: moment)
+            } else {
+                Text(microcopy)
+                    .font(.title3)
+                    .multilineTextAlignment(.center)
+                    .foregroundStyle(.secondary)
+                    .padding(.horizontal)
+            }
             Spacer()
             HStack(spacing: 16) {
                 ShareLink(item: ShareCardRenderer.render(

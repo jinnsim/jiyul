@@ -12,10 +12,17 @@ struct TendleApp: App {
         }
     }()
 
+    @State private var didSplash = false
+
     var body: some Scene {
         WindowGroup {
-            RootView()
-                .modelContainer(container)
+            Group {
+                if didSplash {
+                    RootView().modelContainer(container)
+                } else {
+                    SplashView { didSplash = true }
+                }
+            }
         }
     }
 }

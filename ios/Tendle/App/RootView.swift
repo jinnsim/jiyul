@@ -20,6 +20,8 @@ struct RootView: View {
     @Environment(\.modelContext) private var modelContext
     @State private var path = NavigationPath()
     @State private var liveCoordinator: GameCoordinator?
+    @AppStorage("lastForegroundAt") private var lastForegroundAt: Double = 0
+    @State private var reopenMoment: EncouragementMoment? = nil
 
     var body: some View {
         NavigationStack(path: $path) {
@@ -27,8 +29,19 @@ struct RootView: View {
                 today: KSTClock.dateString(),
                 todayRecord: try? StatsStore(modelContext: modelContext)
                     .record(for: KSTClock.dateString()),
-                onStart: startDaily
+                onStart: startDaily,
+                reopenMoment: reopenMoment
             )
+            .onAppear {
+                let now = Date().timeIntervalSince1970
+                let gapHours = (now - lastForegroundAt) / 3600
+                if gapHours >= 8 {
+                    reopenMoment = EncouragementService().line(
+                        trigger: .reopen, language: lang(),
+                        playerName: "지율", dateKST: KSTClock.dateString(), streak: 0)
+                }
+                lastForegroundAt = now
+            }
             .navigationDestination(for: Route.self) { route in
                 switch route {
                 case .game:
@@ -40,24 +53,47 @@ struct RootView: View {
                         Text("준비 중…")
                     }
                 case .result(let snapshot):
-                    ResultView(session: GameSession(
-                        board: Board(digits: Array(repeating: 1, count: Board.cellCount)),
-                        phase: .ended,
-                        playerScore: snapshot.playerScore,
-                        remainingMs: 0,
-                        startedAt: .now,
-                        dateKSTAtStart: snapshot.dateKST,
-                        solverProgress: snapshot.botScore.map {
-                            SolverProgress(bestScore: $0, expandedStates: 0,
-                                           isFinal: snapshot.botIsFinal)
-                        }
-                    )) {
+                    let streak = (try? StatsStore(modelContext: modelContext).allRecords().count) ?? 0
+                    ResultView(
+                        session: GameSession(
+                            board: Board(digits: Array(repeating: 1, count: Board.cellCount)),
+                            phase: .ended,
+                            playerScore: snapshot.playerScore,
+                            remainingMs: 0,
+                            startedAt: .now,
+                            dateKSTAtStart: snapshot.dateKST,
+                            solverProgress: snapshot.botScore.map {
+                                SolverProgress(bestScore: $0, expandedStates: 0,
+                                               isFinal: snapshot.botIsFinal)
+                            }
+                        ),
+                        encouragementMoment: momentFor(snapshot: snapshot, streak: streak)
+                    ) {
                         path = NavigationPath()
                         liveCoordinator = nil
                     }
                 }
             }
         }
+    }
+
+    private func lang() -> String {
+        Locale.current.language.languageCode?.identifier ?? "ko"
+    }
+
+    private func momentFor(snapshot s: GameSessionSnapshot, streak: Int) -> EncouragementMoment {
+        let trigger: EncouragementTrigger = {
+            guard let bot = s.botScore, s.botIsFinal else { return .roundEndLow }
+            if s.playerScore > bot { return .roundEndBeatBot }
+            if Double(s.playerScore) >= 0.8 * Double(bot) { return .roundEndClose }
+            return .roundEndLow
+        }()
+        return EncouragementService().line(
+            trigger: trigger,
+            language: lang(),
+            playerName: "지율",
+            dateKST: s.dateKST,
+            streak: streak)
     }
 
     private func startDaily() {

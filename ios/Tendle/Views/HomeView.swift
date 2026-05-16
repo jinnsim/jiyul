@@ -4,6 +4,7 @@ struct HomeView: View {
     let today: String
     let todayRecord: DailyRecord?
     let onStart: () -> Void
+    var reopenMoment: EncouragementMoment? = nil
 
     var body: some View {
         VStack(spacing: 28) {
@@ -16,6 +17,14 @@ struct HomeView: View {
             if let record = todayRecord {
                 playedCard(record)
             } else {
+                if let reopen = reopenMoment {
+                    EncouragementMomentView(moment: reopen)
+                } else {
+                    Image("HomeEmpty")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(maxHeight: 220)
+                }
                 Button(action: onStart) {
                     Text("오늘의 보드 시작")
                         .font(.title3.bold())
