@@ -17,9 +17,21 @@ struct ResultView: View {
                 .foregroundStyle(.secondary)
                 .padding(.horizontal)
             Spacer()
-            Button("홈으로", action: onHome)
-                .buttonStyle(.borderedProminent)
+            HStack(spacing: 16) {
+                ShareLink(item: ShareCardRenderer.render(
+                    dateKST: session.dateKSTAtStart,
+                    playerScore: session.playerScore,
+                    botScore: session.solverProgress?.isFinal == true ? session.solverProgress?.bestScore : nil))
+                {
+                    Label("공유", systemImage: "square.and.arrow.up")
+                }
+                .buttonStyle(.bordered)
                 .controlSize(.large)
+
+                Button("홈으로", action: onHome)
+                    .buttonStyle(.borderedProminent)
+                    .controlSize(.large)
+            }
         }
         .padding()
         .navigationBarBackButtonHidden(true)
