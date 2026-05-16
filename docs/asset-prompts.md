@@ -160,20 +160,31 @@ Decision:
 Next revision instruction:
 ```
 
-### r01 기준 노트
+### r01/r02 generation log — Layer 2 character illustrations (2026-05-17)
 
-```text
-Asset: App icon
-Filename: tendle-app-icon-ten-tile-loop-r01.png
-Date: 2026-05-17
-Generator: Codex image generation or DALL-E
-Prompt version: App Icon Selected Direction
-Palette: #2FBF71 / #F7F4EA
-Composition notes: 2x2 tile group centered, single rounded selection rectangle, no written numerals
-Small-size check: must remain recognizable at 40x40 as a grid-selection puzzle icon
-Decision: use as primary AppIcon candidate if tile silhouette and selection frame are readable
-Next revision instruction: increase tile gap and simplify pips if 40x40 preview feels crowded
-```
+Generated via Codex CLI `image_gen.imagegen` tool. All revisions live in
+`assets/generated/`. Discarded revisions moved to `assets/discarded/`.
+
+| Asset | File | Note |
+|-------|------|------|
+| Jiyul reference sheet | `tendle-character-jiyul-sheet-r01.png` | Approved. Polished children's-book aesthetic (more illustrator-style than strict "8-year-old's drawing"); read warm and on-spec for outfit/hair. |
+| Eunchan reference sheet | `tendle-character-eunchan-sheet-r01.png` | Approved. Sky-blue + leaf-green + warm-navy outfit per palette. Co-pose with Jiyul thumbnail consistent. |
+| Creature friends sheet | `tendle-character-creature-friends-sheet-r02.png` | **r01 discarded** — model returned a child+spider scene ignoring "three creatures only" intent. r02 prompted with explicit "NO HUMANS" preamble and row layout; result has all three creatures (mint dragon / lavender spider / apple-green snake) cleanly laid out. |
+| Splash | `tendle-splash-jiyul-eunchan-r01.png` | Approved. Portrait 9:16-ish; Jiyul + Eunchan reaching for big tile with 10 colored dots, mint dragon arcing overhead. |
+| Home empty | `tendle-home-empty-jiyul-eunchan-calendar-r01.png` | Approved. Both children, Jiyul holding blank calendar, spider companion peeking. |
+| Loading | `tendle-loading-jiyul-scroll-snake-r01.png` | Approved. More naive crayon style; Jiyul with scroll, snake on shoulder, number tiles floating. |
+| Result win | `tendle-result-win-jiyul-eunchan-dragon-r01.png` | Approved. High-fiving + mint dragon loop overhead + puzzle confetti. |
+| Result close | `tendle-result-close-jiyul-eunchan-r01.png` | Approved. Naive style; both reaching for central sun-tile. Note: snake reads slightly snail-like — acceptable, regenerate if user wants tighter consistency. |
+| Result low | `tendle-result-low-jiyul-eunchan-spider-r01.png` | Approved. Shrugging + warm spider — no shame imagery. |
+| Streak milestone | `tendle-milestone-streak-jiyul-eunchan-snake-r02.png` | **r01 discarded** — Codex's "find latest generated_images" copy raced with concurrent task and grabbed the creature sheet bytes. r02 generated sequentially; correct image. |
+| Welcome back | `tendle-welcome-back-jiyul-eunchan-r01.png` | Approved. Both waving + all three creature companions visible. |
+
+**Combo sticker**: deferred (transparent-background sticker not required for Phase 1).
+
+**Workflow lesson logged for future revisions**: when running multiple
+`image_gen` calls in parallel, do not rely on "latest file in `~/.codex/generated_images/`" to identify the just-produced image — race conditions
+between concurrent tool calls will swap files. Either serialize the calls
+or capture the file path returned by `image_gen.imagegen` directly.
 
 ## 7. 캐릭터 일러스트 (Layer 2 — 8세 그림체)
 
