@@ -4,6 +4,7 @@ import SwiftData
 enum Route: Hashable {
     case game(dateKST: String)
     case result(GameSessionSnapshot)
+    case stats
 }
 
 /// Hashable, Codable snapshot of session state at end-of-round used in
@@ -30,6 +31,7 @@ struct RootView: View {
                 todayRecord: try? StatsStore(modelContext: modelContext)
                     .record(for: KSTClock.dateString()),
                 onStart: startDaily,
+                onStats: { path.append(Route.stats) },
                 reopenMoment: reopenMoment
             )
             .onAppear {
@@ -72,6 +74,10 @@ struct RootView: View {
                         path = NavigationPath()
                         liveCoordinator = nil
                     }
+                case .stats:
+                    let store = StatsStore(modelContext: modelContext)
+                    let records = (try? store.allRecords()) ?? []
+                    StatsView(summary: StatsAggregator.summarize(records: records))
                 }
             }
         }

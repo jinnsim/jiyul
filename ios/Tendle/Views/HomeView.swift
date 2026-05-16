@@ -4,6 +4,7 @@ struct HomeView: View {
     let today: String
     let todayRecord: DailyRecord?
     let onStart: () -> Void
+    let onStats: () -> Void
     var reopenMoment: EncouragementMoment? = nil
 
     var body: some View {
@@ -34,6 +35,9 @@ struct HomeView: View {
                 .buttonStyle(.borderedProminent)
                 .controlSize(.large)
             }
+            Button("통계 보기", action: onStats)
+                .buttonStyle(.bordered)
+                .controlSize(.regular)
             Spacer()
         }
         .padding()
