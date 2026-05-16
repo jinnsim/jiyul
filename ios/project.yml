@@ -45,5 +45,7 @@ targets:
     deploymentTarget: "17.0"
     sources:
       - path: TendleTests
+      - path: Tendle/Resources/Encouragement.json
+        buildPhase: resources
     dependencies:
       - target: Tendle
