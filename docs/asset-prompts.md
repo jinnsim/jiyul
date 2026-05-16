@@ -174,3 +174,148 @@ Small-size check: must remain recognizable at 40x40 as a grid-selection puzzle i
 Decision: use as primary AppIcon candidate if tile silhouette and selection frame are readable
 Next revision instruction: increase tile gap and simplify pips if 40x40 preview feels crowded
 ```
+
+## 7. 캐릭터 일러스트 (Layer 2 — 8세 그림체)
+
+Layer 2는 §11.1의 미니멀 UI 레이어와 분리된 감정/순간 레이어다. 앱의 버튼, 보드, 아이콘은 Layer 1이 담당하고, 캐릭터 일러스트는 스플래시, 빈 상태, 로딩, 결과, 마일스톤처럼 아이가 "나를 응원한다"고 느끼는 장면에만 사용한다. 모든 장면에서 지율과 은찬은 협동하는 친구로 등장하며, 드래곤/거미/뱀은 둥글고 귀여운 동물 친구처럼 표현한다.
+
+### 7.0 캐릭터 컬러 팔레트
+
+Layer 2는 크레용, 마커, 색연필 질감이 보이도록 따뜻하고 다양한 색을 쓴다. 색은 정확한 벡터 팔레트가 아니라 생성 방향을 고정하기 위한 기준이다.
+
+```text
+Jiyul hair             warm dark brown #4A2C24
+Jiyul skin             warm peach #F3B796
+Jiyul outfit main      sunny coral #F26C5B
+Jiyul outfit accent    butter yellow #FFD76A
+Jiyul shoes/details    berry pink #D94C8A
+
+Eunchan hair           soft black brown #2E2522
+Eunchan skin           warm peach #F0B28F
+Eunchan outfit main    sky blue #4FA7E8
+Eunchan outfit accent  leaf green #54B96F
+Eunchan shoes/details  warm navy #344B7A
+
+Friendly dragon        mint green #75D99B with yellow belly #FFE08A
+Friendly spider        lavender purple #9B7BE8 with teal socks #5BC7C8
+Friendly snake         apple green #7BCF5A with coral spots #F47A6B
+
+Shared warmth          cream paper #FFF1D6, crayon red #E84B45,
+                       marker orange #FF9A3D, soft violet #8B6FE8
+```
+
+공통 프롬프트 조건:
+
+```text
+in the style of an 8-year-old child's drawing, crayon and marker texture, naive perspective, expressive imperfect lines, warm, friendly, encouraging mood, creatures (dragons/spiders/snakes) drawn cute and rounded, never threatening, with smiling faces, two children: Jiyul (long-haired girl) and Eunchan (boy), playing together as friends, no text, no logos, no photorealism, no anime style
+```
+
+### 7.1 캐릭터 시트 (Character sheets)
+
+#### Jiyul reference sheet
+
+출력 파일명: `tendle-character-jiyul-sheet-r01.png`
+
+```text
+character reference sheet, 2048x1536, Jiyul only, long-haired cheerful girl protagonist for a children's puzzle app, show front view, side view, three-quarter view, and expressive face variations: curious, proud, focused, surprised, giggling, include small pose thumbnails where she points at puzzle tiles, holds a calendar tile, and waves to friendly creature companions, warm dark brown long straight hair, sunny coral outfit with butter yellow accents and berry pink details, keep proportions childlike and simple, in the style of an 8-year-old child's drawing, crayon and marker texture, naive perspective, expressive imperfect lines, warm, friendly, encouraging mood, creatures (dragons/spiders/snakes) drawn cute and rounded, never threatening, with smiling faces, no text, no labels, no logos, no photorealism, no anime style
+```
+
+#### Eunchan reference sheet
+
+출력 파일명: `tendle-character-eunchan-sheet-r01.png`
+
+```text
+character reference sheet, 2048x1536, Eunchan only, friendly companion boy for a children's puzzle app, show front view, side view, three-quarter view, and expressive face variations: cheering, thinking, amazed, determined, laughing, include small pose thumbnails where he claps, reaches toward a puzzle tile, sits beside Jiyul, and celebrates a shared win, soft black brown hair, sky blue outfit with leaf green accents and warm navy details, cooperative friend energy, never competitive, keep proportions childlike and simple, in the style of an 8-year-old child's drawing, crayon and marker texture, naive perspective, expressive imperfect lines, warm, friendly, encouraging mood, creatures (dragons/spiders/snakes) drawn cute and rounded, never threatening, with smiling faces, no text, no labels, no logos, no photorealism, no anime style
+```
+
+#### 친구 동물들 reference sheet
+
+출력 파일명: `tendle-character-creature-friends-sheet-r01.png`
+
+```text
+creature companion reference sheet, 2048x1536, three friendly magical animal friends for a children's puzzle app: a mint green rounded dragon with yellow belly, tiny wings, soft horns, big smile; a lavender purple cute spider with eight simple rounded legs, teal sock-like feet, big smile, no scary features; an apple green playful snake with coral spots, rounded head, smiling face, gentle curled poses, show each creature front view, side view, happy action pose, and tiny sticker pose, childlike simple shapes, in the style of an 8-year-old child's drawing, crayon and marker texture, naive perspective, expressive imperfect lines, warm, friendly, encouraging mood, creatures (dragons/spiders/snakes) drawn cute and rounded, never threatening, with smiling faces, no text, no labels, no logos, no photorealism, no anime style
+```
+
+### 7.2 스플래시 / 런치
+
+#### Splash screen: Jiyul + Eunchan + giant 10 tile
+
+출력 파일명: `tendle-splash-jiyul-eunchan-r01.png`
+
+```text
+iOS splash screen illustration, 1290x2796 portrait, Jiyul and Eunchan reaching together toward a giant friendly puzzle tile representing 10 with ten big crayon dots, Jiyul is a long-haired girl in sunny coral and butter yellow, Eunchan is a boy in sky blue and leaf green, they are smiling and playing together as friends, a cute rounded mint green dragon coils gently above them in a playful title-like arc that suggests the Tendle title without drawing any letters, cream paper background with scattered warm crayon puzzle shapes, centered vertical composition with safe empty space near top and bottom for app UI, in the style of an 8-year-old child's drawing, crayon and marker texture, naive perspective, expressive imperfect lines, warm, friendly, encouraging mood, creatures (dragons/spiders/snakes) drawn cute and rounded, never threatening, with smiling faces, no text, no numerals, no logos, no photorealism, no anime style
+```
+
+### 7.3 홈 (HomeView empty-state)
+
+#### HomeView empty-state: today's board
+
+출력 파일명: `tendle-home-empty-jiyul-eunchan-calendar-r01.png`
+
+```text
+empty-state illustration for a children's daily puzzle app, 1024x768, Jiyul and Eunchan sitting cross-legged together on a cream paper floor, Jiyul is a long-haired girl holding today's blank calendar tile with no writing, Eunchan sits beside her smiling and pointing at soft puzzle squares, a cute rounded lavender spider companion peeks from behind the calendar tile with a friendly smile, warm crayon puzzle pieces scattered lightly around them, balanced centered composition with open space above for app content, two children: Jiyul (long-haired girl) and Eunchan (boy), playing together as friends, in the style of an 8-year-old child's drawing, crayon and marker texture, naive perspective, expressive imperfect lines, warm, friendly, encouraging mood, creatures (dragons/spiders/snakes) drawn cute and rounded, never threatening, with smiling faces, no text, no logos, no photorealism, no anime style
+```
+
+### 7.4 게임 로딩 / 솔버 초기화
+
+#### Solver loading: scroll of numbers
+
+출력 파일명: `tendle-loading-jiyul-scroll-snake-r01.png`
+
+```text
+loading illustration for a children's puzzle game, 1024x768, Jiyul reading a tiny scroll of playful number-like puzzle marks while a cute apple green snake friend is draped gently over her shoulder like a scarf, Eunchan kneels beside her looking curious and supportive, both children smiling softly as if solving together, small rounded puzzle tiles float around them, cream paper background with warm crayon marks, two children: Jiyul (long-haired girl) and Eunchan (boy), playing together as friends, in the style of an 8-year-old child's drawing, crayon and marker texture, naive perspective, expressive imperfect lines, warm, friendly, encouraging mood, creatures (dragons/spiders/snakes) drawn cute and rounded, never threatening, with smiling faces, no readable text, no logos, no photorealism, no anime style
+```
+
+### 7.5 결과 화면 (3종)
+
+#### Result Win
+
+출력 파일명: `tendle-result-win-jiyul-eunchan-dragon-r01.png`
+
+```text
+result screen illustration, win moment, 768x512, Jiyul and Eunchan high-fiving with big happy faces, Jiyul is a long-haired girl in sunny coral and butter yellow, Eunchan is a boy in sky blue and leaf green, a cute rounded mint green dragon does a happy loop overhead like a soft ribbon, small colorful crayon puzzle tiles bounce around them, celebratory but gentle, two children: Jiyul (long-haired girl) and Eunchan (boy), playing together as friends, in the style of an 8-year-old child's drawing, crayon and marker texture, naive perspective, expressive imperfect lines, warm, friendly, encouraging mood, creatures (dragons/spiders/snakes) drawn cute and rounded, never threatening, with smiling faces, no text, no logos, no photorealism, no anime style
+```
+
+#### Result Close / cliffhanger
+
+출력 파일명: `tendle-result-close-jiyul-eunchan-r01.png`
+
+```text
+result screen illustration, close cliffhanger moment, 768x512, Jiyul and Eunchan with determined encouraging faces, both leaning forward with almost-reaching hands toward a final rounded puzzle tile just out of reach, they look hopeful and ready to try again, not upset, a few warm crayon puzzle sparks around the tile, cooperative friend energy, two children: Jiyul (long-haired girl) and Eunchan (boy), playing together as friends, in the style of an 8-year-old child's drawing, crayon and marker texture, naive perspective, expressive imperfect lines, warm, friendly, encouraging mood, creatures (dragons/spiders/snakes) drawn cute and rounded, never threatening, with smiling faces, no text, no logos, no photorealism, no anime style
+```
+
+#### Result Low / lose
+
+출력 파일명: `tendle-result-low-jiyul-eunchan-spider-r01.png`
+
+```text
+result screen illustration, low score encouragement moment, 768x512, Jiyul and Eunchan shrugging warmly together with gentle smiles, no sad faces, no shame, no failure symbols, a cute rounded lavender spider companion gives a tiny thumbs-up beside them, soft scattered puzzle tiles on cream paper background, the mood says that trying again is welcome and friendly, two children: Jiyul (long-haired girl) and Eunchan (boy), playing together as friends, in the style of an 8-year-old child's drawing, crayon and marker texture, naive perspective, expressive imperfect lines, warm, friendly, encouraging mood, creatures (dragons/spiders/snakes) drawn cute and rounded, never threatening, with smiling faces, no text, no logos, no photorealism, no anime style
+```
+
+### 7.6 마일스톤
+
+#### Streak milestone
+
+출력 파일명: `tendle-milestone-streak-jiyul-eunchan-snake-r01.png`
+
+```text
+streak milestone illustration for a children's daily puzzle app, 1024x768, Jiyul wearing a simple paper crown and smiling proudly, Eunchan clapping beside her with a happy supportive face, a cute apple green snake forms a small celebratory loop near their feet like a soft spiral, warm crayon confetti dots and rounded puzzle tiles around them, celebratory but cozy, two children: Jiyul (long-haired girl) and Eunchan (boy), playing together as friends, in the style of an 8-year-old child's drawing, crayon and marker texture, naive perspective, expressive imperfect lines, warm, friendly, encouraging mood, creatures (dragons/spiders/snakes) drawn cute and rounded, never threatening, with smiling faces, no text, no logos, no photorealism, no anime style
+```
+
+### 7.7 부가 모먼트 (선택적)
+
+#### Combo sticker
+
+출력 파일명: `tendle-sticker-combo-creature-friends-r01.png`
+
+```text
+small transparent-background sticker illustration, 512x512, combo moment for a children's puzzle app, Jiyul and Eunchan popping into frame from the bottom edge with excited smiles while a tiny cute rounded dragon, spider, and snake stack friendly puzzle tiles together, energetic warm crayon motion lines, compact readable silhouette for in-app overlay use, two children: Jiyul (long-haired girl) and Eunchan (boy), playing together as friends, in the style of an 8-year-old child's drawing, crayon and marker texture, naive perspective, expressive imperfect lines, warm, friendly, encouraging mood, creatures (dragons/spiders/snakes) drawn cute and rounded, never threatening, with smiling faces, no text, no logos, no photorealism, no anime style
+```
+
+#### App revisit welcome
+
+출력 파일명: `tendle-welcome-back-jiyul-eunchan-r01.png`
+
+```text
+welcome back illustration for a children's daily puzzle app, 1024x768, Jiyul and Eunchan waving warmly from behind a soft rounded puzzle board, Jiyul is a long-haired girl in sunny coral and butter yellow, Eunchan is a boy in sky blue and leaf green, the friendly mint dragon peeks from one side, the lavender spider peeks from another side, and the apple green snake curls gently along the bottom edge, cream paper background with varied warm crayon colors, two children: Jiyul (long-haired girl) and Eunchan (boy), playing together as friends, in the style of an 8-year-old child's drawing, crayon and marker texture, naive perspective, expressive imperfect lines, warm, friendly, encouraging mood, creatures (dragons/spiders/snakes) drawn cute and rounded, never threatening, with smiling faces, no text, no logos, no photorealism, no anime style
+```
