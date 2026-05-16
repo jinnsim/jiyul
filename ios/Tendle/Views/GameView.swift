@@ -6,6 +6,7 @@ struct GameView: View {
     @State private var dragCurrent: CGPoint?
     @State private var boardSize: CGSize = .zero
     @State private var lastTick: Date = .now
+    @State private var showLoading = true
 
     private let onFinish: (GameSession) -> Void
 
@@ -25,6 +26,9 @@ struct GameView: View {
         .onAppear {
             coordinator.start()
             lastTick = .now
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                withAnimation { showLoading = false }
+            }
         }
         .onReceive(Timer.publish(every: 0.05, on: .main, in: .common).autoconnect()) { now in
             let deltaMs = Int(now.timeIntervalSince(lastTick) * 1000)
@@ -32,6 +36,22 @@ struct GameView: View {
             coordinator.tick(deltaMs: deltaMs)
             if coordinator.session.phase == .ended {
                 onFinish(coordinator.session)
+            }
+        }
+        .overlay(alignment: .center) {
+            if showLoading {
+                VStack(spacing: 12) {
+                    Image("LoadingScene")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(maxHeight: 220)
+                    Text("준비 중…")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+                .padding(24)
+                .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 18))
+                .transition(.opacity.combined(with: .scale(scale: 0.96)))
             }
         }
     }
