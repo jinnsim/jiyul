@@ -117,3 +117,28 @@ enum Solver {
         return lhs.count < rhs.count
     }
 }
+
+extension Solver {
+    /// Background-priority detached task that emits progress updates and
+    /// finalises with isFinal=true. Cancellation drops further emissions.
+    static func solveAsync(
+        _ board: Board,
+        profile: SolverProfile = .mvpV1
+    ) -> (AsyncStream<SolverProgress>, Task<Void, Never>) {
+        let (stream, continuation) = AsyncStream.makeStream(of: SolverProgress.self)
+        let task = Task.detached(priority: .background) {
+            // For Phase 1 we run the synchronous solver in one shot and
+            // emit a single final progress. Incremental "anytime" updates
+            // are added in Phase 2 (see spec §5.1).
+            let result = Solver.solve(board, profile: profile)
+            if !Task.isCancelled {
+                continuation.yield(SolverProgress(
+                    bestScore: result.score,
+                    expandedStates: result.expandedStates,
+                    isFinal: true))
+            }
+            continuation.finish()
+        }
+        return (stream, task)
+    }
+}
