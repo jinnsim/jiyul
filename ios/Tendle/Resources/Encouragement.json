@@ -1,0 +1,181 @@
+{
+  "version": 1,
+  "triggers": {
+    "roundStart": {
+      "ko": [
+        "지율아, 오늘도 즐겁게 시작하자!",
+        "지율이 차례야, 천천히 해보자.",
+        "지율아, 숫자 친구들이 기다려!",
+        "지율이 마음대로 멋지게 골라봐.",
+        "지율아, 작은 모험을 시작해 볼까?",
+        "지율이 드래곤도 옆에서 응원해!",
+        "지율아, 오늘 퍼즐도 반가워해.",
+        "지율이답게 신나게 출발!"
+      ],
+      "en": [
+        "Let's start, Jiyul!",
+        "Your turn, Jiyul. Take it easy.",
+        "Jiyul, the numbers are ready!",
+        "Pick your way, Jiyul.",
+        "A tiny adventure starts, Jiyul!",
+        "Your dragon is cheering, Jiyul!",
+        "This puzzle is happy to see Jiyul.",
+        "Bright start, Jiyul!"
+      ]
+    },
+    "firstClear": {
+      "ko": [
+        "좋아, 지율아! 첫 클리어야.",
+        "지율이 멋지게 문을 열었어!",
+        "지율아, 시작이 반짝반짝해.",
+        "와, 지율이 손끝이 빠르네!",
+        "지율아, 첫 발걸음이 좋아.",
+        "지율이 거미 친구도 박수 쳐!",
+        "지율아, 숫자 길을 찾았어.",
+        "지율이 출발이 아주 산뜻해!"
+      ],
+      "en": [
+        "Nice first clear, Jiyul!",
+        "Jiyul opened the door!",
+        "Sparkly start, Jiyul.",
+        "Quick fingers, Jiyul!",
+        "Great first step, Jiyul.",
+        "Your spider claps for you, Jiyul!",
+        "You found the number path, Jiyul.",
+        "Fresh start, Jiyul!"
+      ]
+    },
+    "combo": {
+      "ko": [
+        "와, 지율아! 콤보가 반짝여!",
+        "지율이 리듬이 아주 좋아!",
+        "지율아, 숫자가 착착 붙어!",
+        "지율이 손이 춤추는 것 같아!",
+        "지율아, 뱀 친구도 빙글빙글!",
+        "멋져, 지율이 콤보 행진!",
+        "지율아, 지금 흐름이 좋아.",
+        "지율이 생각이 번쩍했어!"
+      ],
+      "en": [
+        "Wow, Jiyul! Shiny combo!",
+        "Jiyul, you found a great rhythm!",
+        "The numbers are clicking, Jiyul!",
+        "Your hands are dancing, Jiyul!",
+        "Your snake friend spins, Jiyul!",
+        "Great combo run, Jiyul!",
+        "Nice flow right now, Jiyul.",
+        "Bright thinking, Jiyul!"
+      ]
+    },
+    "roundEndBeatBot": {
+      "ko": [
+        "지율이가 봇을 이겼어! 멋져!",
+        "해냈다, 지율아! 봇보다 앞섰어.",
+        "지율이 승리야, 기분 좋다!",
+        "지율아, 오늘은 네가 반짝였어.",
+        "지율이 드래곤이 하늘을 돈다!",
+        "잘했어, 지율아! 봇을 넘었어.",
+        "지율이 힘으로 멋진 승리!",
+        "지율아, 숫자 성을 지켰어!"
+      ],
+      "en": [
+        "You beat the bot, Jiyul!",
+        "You did it, Jiyul!",
+        "Jiyul wins this round!",
+        "You really shined, Jiyul.",
+        "Your dragon loops above, Jiyul!",
+        "Great job, Jiyul. Past the bot!",
+        "A strong win for Jiyul!",
+        "You guarded number castle, Jiyul!"
+      ]
+    },
+    "roundEndClose": {
+      "ko": [
+        "거의 다 왔어, 지율아!",
+        "지율이 정말 가까웠어.",
+        "아슬아슬했어, 지율아! 멋졌어.",
+        "지율아, 다음 모험도 기대돼.",
+        "지율이 드래곤도 고개를 끄덕여.",
+        "지율아, 좋은 생각이 많았어.",
+        "지율이 한 걸음 더 가까워졌어.",
+        "멋진 도전이었어, 지율아."
+      ],
+      "en": [
+        "So close, Jiyul!",
+        "Jiyul, that was really close.",
+        "Tiny gap, big effort, Jiyul!",
+        "Next adventure will be fun, Jiyul.",
+        "Your dragon nods, Jiyul.",
+        "You had smart ideas, Jiyul.",
+        "One step closer, Jiyul.",
+        "That was a brave try, Jiyul."
+      ]
+    },
+    "roundEndLow": {
+      "ko": [
+        "오늘은 어려웠지, 지율아.",
+        "괜찮아, 지율이 천천히 다시 해보자.",
+        "지율아, 퍼즐도 쉬운 날만 있진 않아.",
+        "지율이 마음은 여전히 반짝여.",
+        "지율아, 거미 친구가 토닥토닥.",
+        "지율이랑 함께 다시 가보자.",
+        "지율아, 쉬었다 해도 괜찮아.",
+        "지율이 도전은 소중해."
+      ],
+      "en": [
+        "That was tricky, Jiyul.",
+        "It's okay, Jiyul. Try slow.",
+        "Some puzzles are tough, Jiyul.",
+        "Your sparkle is still here, Jiyul.",
+        "Your spider gives a pat, Jiyul.",
+        "Let's try together, Jiyul.",
+        "A little break is okay, Jiyul.",
+        "Your try matters, Jiyul."
+      ]
+    },
+    "streakUp": {
+      "ko": [
+        "{streak}일째야, 지율아! 꾸준해.",
+        "지율이 {streak}일째 반짝이는 중!",
+        "{streak}일째 찾아온 지율이, 멋져!",
+        "지율아, {streak}일째 모험 성공!",
+        "지율이 뱀 친구도 {streak}일째 축하해!",
+        "{streak}일째라니, 지율이 대단해.",
+        "지율아, {streak}일째 함께했어.",
+        "지율이 {streak}일째 발걸음 좋아!"
+      ],
+      "en": [
+        "{streak} days in a row, Jiyul!",
+        "Jiyul, {streak} days of sparkle!",
+        "{streak} days back, nice, Jiyul!",
+        "Adventure day {streak}, Jiyul!",
+        "Your snake cheers day {streak}, Jiyul!",
+        "{streak} days, Jiyul. That's great!",
+        "{streak} days together, Jiyul.",
+        "Steady steps for {streak} days, Jiyul!"
+      ]
+    },
+    "reopen": {
+      "ko": [
+        "지율아, 다시 와줘서 반가워!",
+        "지율이 돌아왔다! 기다렸어.",
+        "안녕, 지율아. 또 놀아보자.",
+        "지율아, 숫자 친구들이 손 흔들어.",
+        "지율이 드래곤이 꼬리를 흔들어!",
+        "지율아, 오늘도 만나서 좋아.",
+        "지율이 자리 그대로 비워뒀어.",
+        "어서 와, 지율아. 천천히 시작해."
+      ],
+      "en": [
+        "Welcome back, Jiyul!",
+        "Jiyul is back! We waited.",
+        "Hi, Jiyul. Let's play again.",
+        "The numbers wave at Jiyul.",
+        "Your dragon wags its tail, Jiyul!",
+        "Good to see you today, Jiyul.",
+        "Your spot was saved, Jiyul.",
+        "Come on in, Jiyul. Start slow."
+      ]
+    }
+  }
+}
