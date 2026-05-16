@@ -25,12 +25,27 @@ let rerunMatches = zip(seeds, firstRun).allSatisfy { seed, expected in
 let scores = firstRun.map(\.score)
 let sortedTimes = elapsedTimes.sorted()
 let p95Index = min(sortedTimes.count - 1, Int(Double(sortedTimes.count - 1) * 0.95))
+let p95 = sortedTimes[p95Index]
 let averageScore = Double(scores.reduce(0, +)) / Double(scores.count)
 
 print(String(format: "summary minScore=%d maxScore=%d avgScore=%.2f p95=%.3fs determinism=%@",
              scores.min() ?? 0,
              scores.max() ?? 0,
              averageScore,
-             sortedTimes[p95Index],
+             p95,
              rerunMatches ? "pass" : "fail"))
+
+// Spec §5.6 Gate 2 + Gate 3 — non-zero exit on failure.
+let p95Ceiling = 30.0
+var failed = false
+if !rerunMatches {
+    print("GATE 2 FAIL: determinism rerun produced different result.")
+    failed = true
+}
+if p95 >= p95Ceiling {
+    print(String(format: "GATE 3 FAIL: p95 %.3fs >= %.1fs ceiling.", p95, p95Ceiling))
+    failed = true
+}
+if failed { exit(1) }
+print("GATES OK: determinism pass, p95 < 30s.")
 

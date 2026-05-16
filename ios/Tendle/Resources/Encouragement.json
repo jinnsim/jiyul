@@ -6,11 +6,11 @@
         "지율아, 오늘도 즐겁게 시작하자!",
         "지율이 차례야, 천천히 해보자.",
         "지율아, 숫자 친구들이 기다려!",
-        "지율이 마음대로 멋지게 골라봐.",
+        "지율아, 원하는 곳부터 골라봐.",
         "지율아, 작은 모험을 시작해 볼까?",
         "지율이 드래곤도 옆에서 응원해!",
         "지율아, 오늘 퍼즐도 반가워해.",
-        "지율이답게 신나게 출발!"
+        "지율아, 신나게 출발!"
       ],
       "en": [
         "Let's start, Jiyul!",
@@ -76,7 +76,7 @@
         "지율이 드래곤이 하늘을 돈다!",
         "잘했어, 지율아! 봇을 넘었어.",
         "지율이 힘으로 멋진 승리!",
-        "지율아, 숫자 성을 지켰어!"
+        "지율아, 오늘은 네 날이야!"
       ],
       "en": [
         "You beat the bot, Jiyul!",
@@ -86,7 +86,7 @@
         "Your dragon loops above, Jiyul!",
         "Great job, Jiyul. Past the bot!",
         "A strong win for Jiyul!",
-        "You guarded number castle, Jiyul!"
+        "Today is your day, Jiyul!"
       ]
     },
     "roundEndClose": {

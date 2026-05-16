@@ -1,0 +1,5 @@
+seed=c4ba697c0ccbf0f8 score=114 expanded=2762 time=1.467s
+seed=62f1e3358c166d0d score=111 expanded=2711 time=1.374s
+seed=01295cef0b60e922 score=108 expanded=2591 time=1.315s
+summary minScore=99 maxScore=123 avgScore=109.17 p95=2.326s determinism=pass
+GATES OK: determinism pass, p95 < 30s.

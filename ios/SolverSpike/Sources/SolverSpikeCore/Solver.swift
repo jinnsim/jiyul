@@ -14,12 +14,14 @@ public enum Solver {
 
     public static func solve(_ board: Board, profile: SolverProfile = .mvpV1) -> SolverResult {
         let expandedLimit = profile.maxExpandedStates
+        let visitedLimit = profile.maxVisitedStates
         let initial = State(board: board, score: 0, moves: [], evaluation: evaluate(board: board, score: 0, alpha: profile.alpha))
         var beam = [initial]
         var best = initial
-        var visited = Set<Board>()
-        visited.insert(board)
+        var visited = Set<[UInt64]>()
+        visited.insert(board.clearedWords)
         var expandedStates = 0
+        var visitedFull = false
 
         while !beam.isEmpty && expandedStates < expandedLimit {
             var successors: [State] = []
@@ -30,7 +32,10 @@ public enum Solver {
 
                 for action in BoardEngine.validClearActions(on: state.board) {
                     let clear = action.result
-                    guard visited.insert(clear.board).inserted else { continue }
+                    if !visitedFull {
+                        guard visited.insert(clear.board.clearedWords).inserted else { continue }
+                        if visited.count >= visitedLimit { visitedFull = true }
+                    }
                     var moves = state.moves
                     moves.append(action.selection)
                     let score = state.score + clear.clearedCells

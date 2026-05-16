@@ -210,6 +210,28 @@ Shared warmth          cream paper #FFF1D6, crayon red #E84B45,
 in the style of an 8-year-old child's drawing, crayon and marker texture, naive perspective, expressive imperfect lines, warm, friendly, encouraging mood, creatures (dragons/spiders/snakes) drawn cute and rounded, never threatening, with smiling faces, two children: Jiyul (long-haired girl) and Eunchan (boy), playing together as friends, no text, no logos, no photorealism, no anime style
 ```
 
+### 7.0.5 생성 순서 & 캐릭터 일관성 워크플로
+
+이미지 생성기에서 캐릭터 외모가 장면마다 흔들리는 것을 막기 위해 **반드시 다음
+순서**로 작업한다:
+
+1. **§7.1 캐릭터 시트 3종을 먼저 생성** (Jiyul, Eunchan, 동물 친구들).
+2. 시트 결과를 사용자(또는 디자이너)가 **승인**한 뒤 저장 (예: `tendle-character-jiyul-sheet-r01.png`).
+3. 이후 모든 장면 프롬프트(§7.2 ~ §7.7)는 **승인된 시트 PNG를 reference
+   image로 첨부**하여 생성한다. 텍스트 프롬프트만으로는 얼굴/머리/비율이
+   장면마다 흔들린다.
+4. 각 장면 프롬프트에는 다음 고정 문구를 추가:
+
+```text
+use the approved character reference sheets (Jiyul, Eunchan, creature
+friends) as visual reference. Do not redesign the characters. Preserve face
+shape, hairstyle length and color, outfit colors, and overall proportions
+exactly as shown in the reference sheets.
+```
+
+5. 리비전(r02, r03)을 만들 때는 같은 시트를 reference로 계속 쓴다. 시트가
+   바뀌면 모든 후속 자산을 함께 재생성한다.
+
 ### 7.1 캐릭터 시트 (Character sheets)
 
 #### Jiyul reference sheet

@@ -1,9 +1,10 @@
 # Tendle — Design Spec
 
-**Status:** Draft v3 (character + encouragement layer — awaiting user approval)
+**Status:** Draft v4 (post Codex round-2 review — implementation source of truth)
 **Date:** 2026-05-17
 **Owner:** Jung Soon Shin (@jinnsim)
-**Target Phase:** MVP (Phase 1)
+**Target Phase:** MVP (Phase 1) — **Jiyul-first personal/family build**, App Store
+deferred (§13.1).
 
 ---
 
@@ -24,6 +25,13 @@ world. Two consequences for design:
 
 The game is still well-formed for any player; nothing breaks if a different
 person plays. But Jiyul is its first user, and the experience is tuned for her.
+
+**Distribution scope (MVP):** personal/family. Installation via Xcode direct
+build, sideload, or TestFlight invitation. **No App Store submission in MVP.**
+This intentionally avoids Kids Category review, COPPA compliance, parental
+gate, and privacy-policy requirements until/unless we choose to publish (§13.1).
+The character framing (Jiyul as protagonist, no generic mode) is deliberate
+for this scope and is **not** a Phase-1 toggle — it is the product.
 
 ---
 
@@ -446,7 +454,8 @@ prompts checked into `docs/asset-prompts.md`:
 - Jiyul and Eunchan illustrations placed in splash, loading, empty states,
   result screens, milestone moments (streak, win-vs-bot).
 - Crayon / marker / colored-pencil texture, naive perspective, expressive
-  imperfection, hand-lettered details acceptable.
+  imperfection. **No readable text** in any Layer-2 asset (in-app text is
+  always system-rendered, never baked into illustrations).
 - Jiyul recurring motifs: friendly dragons, cute spiders, playful snakes —
   drawn as companions, never threatening.
 
@@ -489,6 +498,27 @@ CI: GitHub Actions runs `xcodebuild test` on push.
 - **Accessibility:** VoiceOver labels on cells ("3, 5열 8행"), Dynamic Type
   support on text labels, reduce-motion respects clear animations.
 - **Privacy:** zero data leaves device. No analytics, no crash reporter in MVP.
+  `playerName` is stored locally (SwiftData), never transmitted.
+
+### 13.1 App Store / Child-Safety posture
+
+MVP is **personal/family distribution only** (§0). No App Store submission.
+
+If we later choose to publish to the App Store, the following must be added
+before submission (and are **not** in MVP scope):
+
+- Decide Kids Category vs general (presence of a child-targeted UI/characters
+  likely triggers reviewer scrutiny either way).
+- Public privacy policy URL (even with zero data collection, Apple requires
+  one if the app is plausibly directed at children).
+- Parental gate before any links leaving the app, any settings reset action,
+  and any future in-app purchase or social feature.
+- App Privacy "Nutrition Label" declaring `playerName` as locally stored,
+  not collected.
+- Compliance review against COPPA (US), GDPR-K (EU), and Apple's
+  Children's Category guidelines.
+
+Until that work is scheduled, the project remains a private build.
 
 ---
 
@@ -564,11 +594,15 @@ CI: GitHub Actions runs `xcodebuild test` on push.
 
 ## 17. Open Questions (none blocking implementation)
 
-- Final App Store listing name (Tendle is placeholder).
+- Final App Store listing name (Tendle is placeholder; App Store deferred —
+  see §13.1).
 - `α` final value pending §5.6 spike completion.
 - Whether to expose haptic intensity slider — currently Phase 1.5.
-- Whether `playerName` is user-editable in MVP (default "지율"). Recommend
-  yes, single field in Settings.
+
+**Resolved in v4:**
+- `playerName` editable in MVP — single text field in Settings, default "지율".
+  This is a confirmed MVP feature, not an open question (see §8 Settings,
+  §18.1 character system).
 
 ---
 
@@ -623,11 +657,38 @@ and `Resources/Encouragement.json`.
 **Selection rule** (deterministic, varied):
 
 ```swift
-seed = hash(playerName, dateKST, triggerKind, attemptIndex)
-line = catalog[triggerKind][seed % catalog[triggerKind].count]
+seed = hash(playerName, dateKST, triggerKind)        // attemptIndex EXCLUDED
+line = catalog[triggerKind][lang][seed % catalog[triggerKind][lang].count]
 ```
 
-Same trigger same day → same line. Different attempts/days vary naturally.
+`attemptIndex` is intentionally **not** in the seed. This means: same trigger
+on the same day produces the **same** encouragement line across the first
+attempt and any replays — see §18.4. Variety comes from new days and new
+triggers, not from replays.
+
+**Trigger thresholds** (fixed, ship-locked):
+
+| Trigger | Fires when |
+|---------|-----------|
+| `roundStart` | `GameSession` enters playing state |
+| `firstClear` | first successful clear in a session |
+| `combo` | 3+ clears within a 5-second sliding window |
+| `roundEndBeatBot` | `playerScore > botScore` AND `botStatus == .final` at end |
+| `roundEndClose` | `botScore × 0.8 ≤ playerScore ≤ botScore` |
+| `roundEndLow` | `playerScore < botScore × 0.8` |
+| `streakUp` | streak increments by 1 on first daily completion |
+| `reopen` | app launch with ≥ 8h since last foreground |
+
+If `botStatus != .final` at round end, the result-end trigger fires once the
+bot settles (in `ResultView`), not at the moment of round end.
+
+**`{streak}` substitution contract:**
+- Only catalog placeholder allowed in MVP.
+- Substitution: literal `String(streak)` (Korean and English both use Arabic
+  numerals; no pluralization needed — copy is authored to read naturally
+  with any positive integer).
+- Missing/invalid value (≤0): omit the line and fall back to next deterministic
+  index (`seed+1`). Unit-tested.
 
 **Language**: catalog stores `{ ko: [...], en: [...] }` arrays per trigger.
 Active language follows `Settings.languageOverride ?? Locale.current`.
@@ -644,8 +705,13 @@ to me today" without weird non-repro behaviour.
 
 ### 18.5 Implementation footprint
 
-- One new service: `EncouragementService` (~50 LOC).
-- One new resource: `Encouragement.json` (KO+EN copy bank, ~30 lines/trigger).
+- One new service: `EncouragementService` (~80 LOC including substitution
+  and missing-value fallback).
+- One new resource: `Encouragement.json` — 8 lines × 2 languages × 8 triggers
+  = **128 lines total**.
+- Trigger enum: `enum EncouragementTrigger { case roundStart, firstClear,
+  combo, roundEndBeatBot, roundEndClose, roundEndLow, streakUp, reopen }` —
+  JSON keys are the case names verbatim.
 - Hooks: `GameCoordinator` emits trigger events; `EncouragementService`
   returns line; relevant views display in a non-blocking banner / overlay.
 - Layer-2 illustrations attached to triggers via `EncouragementMomentView`
