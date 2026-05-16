@@ -43,6 +43,7 @@ struct RootView: View {
                         playerName: "지율", dateKST: KSTClock.dateString(), streak: 0)
                 }
                 lastForegroundAt = now
+                finalizePendingBots()
             }
             .navigationDestination(for: Route.self) { route in
                 switch route {
@@ -100,6 +101,28 @@ struct RootView: View {
             playerName: "지율",
             dateKST: s.dateKST,
             streak: streak)
+    }
+
+    /// Walks any DailyRecord rows whose `botStatus == .pending` and runs the
+    /// deterministic solver on their seed in the background. On success,
+    /// upgrades the record to `.final` with the score.
+    private func finalizePendingBots() {
+        let context = modelContext
+        Task.detached(priority: .background) {
+            let store = await MainActor.run { StatsStore(modelContext: context) }
+            let pending: [DailyRecord] = await MainActor.run {
+                ((try? store.allRecords()) ?? []).filter { $0.botStatus == .pending }
+            }
+            for record in pending {
+                let date = record.dateKSTAtStart
+                let seed = KSTClock.dailySeed(forDate: date)
+                let board = BoardGenerator.generate(seed: seed)
+                let result = Solver.solve(board, profile: .mvpV1)
+                await MainActor.run {
+                    try? store.finalizePendingBot(date: record.dateKST, botScore: result.score)
+                }
+            }
+        }
     }
 
     private func startDaily() {

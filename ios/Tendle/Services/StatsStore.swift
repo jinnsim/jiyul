@@ -30,6 +30,17 @@ final class StatsStore {
             sortBy: [SortDescriptor(\.dateKST, order: .reverse)]))
     }
 
+    /// Upgrade a previously-saved record from `.pending` to `.final` with the
+    /// freshly-computed bot score. No-op if the record is already `.final` or
+    /// missing.
+    func finalizePendingBot(date: String, botScore: Int) throws {
+        guard let record = try record(for: date), record.botStatus == .pending else { return }
+        record.botScore = botScore
+        record.botStatus = .final
+        record.botFinalizedAt = Date()
+        try modelContext.save()
+    }
+
     private func recordExists(for dateKST: String) throws -> Bool {
         try record(for: dateKST) != nil
     }
