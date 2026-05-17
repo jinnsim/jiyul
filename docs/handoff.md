@@ -162,3 +162,94 @@ Per the plan tail (`docs/superpowers/plans/2026-05-17-tendle-mvp-phase1.md`
 - Custom-designed `.caf` sound clips.
 - `ImageRenderer`-based share card PNG (richer than plain text).
 - Abandoned-attempt detection.
+
+---
+
+## 2026-05-17 — Phase 3 complete (Polished & Localized) + hotfixes
+
+**Status:** ✅ Phase 3 success criterion met (see plan Phase 3).
+
+### Shipped (Phase 3)
+
+- **App name** changed to **Jiyul** (`CFBundleDisplayName` + `CFBundleName`
+  via `project.yml`; `HomeView` title key; share card header). Bundle ID
+  and source tree directories remain `Tendle`/`com.jinnsim.Tendle` to
+  avoid noisy renames.
+- **App icon** — Codex-generated 1024×1024 PNG (Ten Tile Loop variant from
+  `docs/asset-prompts.md` §4) populated into `AppIcon.appiconset`.
+- **Localization** — `Localizable.xcstrings` with 30+ keys × ko/en;
+  `AppLanguage` enum (system/ko/en); all user-facing literals in
+  `HomeView`, `GameView`, `SelectionOverlay`, `ResultView`, `StatsView`
+  routed through `String(localized:)` / `Text("Key")`.
+- **SettingsView + SettingsStore** — `Form` UI with four sections:
+  language `Picker`, sound `Toggle` (wired to `SoundService.shared`),
+  player name `TextField`, destructive reset with `Alert`. `RootView`
+  applies `.environment(\.locale, currentLocale)` on `NavigationStack`
+  for the in-app language override. Refreshed via lifecycle hooks
+  (`HomeView.onAppear` + `SettingsView.onDisappear`) to avoid SwiftData
+  reads inside `body`.
+- **iPad tuning** — `GameView` clamps `cellSize` to a max of 42 pt so the
+  17×10 board renders finger-friendly even on the largest iPad screen.
+  `StatsView` uses `ViewThatFits`: single `HStack` of 4 metrics first,
+  falls back to a 2×2 `LazyVGrid` when horizontal space is constrained.
+  Outer container clamped to 640 pt max width.
+- **Abandoned-attempt detection** — `RootView.startDaily()` now inserts an
+  `outcome: "abandoned"` placeholder `DailyRecord` before pushing the
+  game route. `handleFinish()` upgrades the existing record in-place to
+  `outcome: "completed"`. `StatsAggregator.streakDays` already excludes
+  non-completed rows (P2 round-3 fix). `ScenePhase` observer +
+  `AbandonmentMonitor.shouldMarkAbandoned` (3 unit tests pass) provide
+  the documented gate for future use; the placeholder approach makes
+  the explicit cleanup pass unnecessary today.
+- **Share card PNG** — `ShareCardImageRenderer` (`@MainActor`, 1080×1080
+  via `ImageRenderer`) writes a cream-paper card with player + bot scores
+  + percentage to a temp file URL. `ResultView` renders on first appear
+  (`@State + onAppear` to avoid body re-eval cost). `ShareLink(item: URL)`
+  with `SharePreview`. Plain-text fallback `ShareCardRenderer.render(...)`
+  remains for the brief pre-onAppear window.
+- **GitHub Actions CI** — `.github/workflows/ci.yml` on `macos-14` with
+  Xcode 15.4; generates project via xcodegen; runs the fast unit suite
+  (skips the slow ~200 s Solver determinism test) on every push and PR.
+- **BoardView candy-token design** — soft per-digit pastel backgrounds
+  (1→peach, 2→butter, 3→mint, … 9→coral), rounded corners (~22% of cell),
+  subtle drop shadow + 0.6 pt hairline border, 2.5 pt accent-color border
+  when in the selection rectangle, 0.18 s fade-out + scale-to-0.4 clear
+  animation, 2 pt inter-cell spacing. Replaces the plain grey grid with
+  marble-like tokens while keeping digit contrast strong.
+
+### Hotfix during Phase 3
+
+- **Navigation bug** — tapping start/retry twice in a row used to stick
+  on the loading overlay until backing out. `Route.game(dateKST:)`
+  hashed identically across rounds so SwiftUI's `navigationDestination`
+  reused the same view + state while `liveCoordinator` was reset to
+  `nil` between push calls. Fix: `Route.game` now carries a per-session
+  `sessionID: Double` (current `TimeIntervalSince1970`); `GameView` owns
+  its own `GameCoordinator` (created in `init` from `dateKST`) instead
+  of depending on `RootView` state; `.id(sessionID)` on the destination
+  forces a fresh view per session. RootView keeps a
+  `lastFinishedCoordinator` only for `ResultView`'s pending-bot live
+  update.
+
+### Test counts (Phase 3 end-of-phase)
+
+- **38/39** unit tests pass when including the slow Solver determinism
+  test (skipped routinely; ~200 s on iPhone 15 sim debug).
+- New suites: `SettingsStoreTests` (3/3), `AbandonmentMonitorTests`
+  (3/3), `ShareCardImageRendererTests` (1/1).
+
+### Repo state
+
+- Pushed to **https://github.com/jinnsim/jiyul.git** (default branch
+  `main`). CI workflow runs on next push.
+
+### Known limitations after Phase 3
+
+- Custom-designed `.caf` sound clips still deferred (system Tink/Glass/
+  Submarine `afconvert`-ed; replace before any App Store submission).
+- `NavigationSplitView` sidebar on iPad not pursued — adaptive cell-size
+  cap + ViewThatFits cover the practical need; sidebar can be added in
+  Phase 4 if desired.
+- Anytime solver still single-shot per round; spec §5.1's incremental
+  emission is a Phase 4 polish.
+- GameKit leaderboards, push notifications, web companion — not started.
