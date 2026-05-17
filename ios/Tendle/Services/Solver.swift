@@ -15,7 +15,11 @@ enum Solver {
         let evaluation: Double
     }
 
-    static func solve(_ board: Board, profile: SolverProfile = .mvpV1) -> SolverResult {
+    static func solve(
+        _ board: Board,
+        profile: SolverProfile = .mvpV1,
+        onProgress: ((Int, Int) -> Void)? = nil
+    ) -> SolverResult {
         let expandedLimit = profile.maxExpandedStates
         let visitedLimit = profile.maxVisitedStates
         let initial = State(board: board, score: 0, moves: [], evaluation: evaluate(board: board, score: 0, alpha: profile.alpha))
@@ -51,6 +55,7 @@ enum Solver {
                     successors.append(successor)
                     if isBetterRealized(successor, than: best) {
                         best = successor
+                        onProgress?(best.score, expandedStates)
                     }
                 }
             }
@@ -127,10 +132,11 @@ extension Solver {
     ) -> (AsyncStream<SolverProgress>, Task<Void, Never>) {
         let (stream, continuation) = AsyncStream.makeStream(of: SolverProgress.self)
         let task = Task.detached(priority: .background) {
-            // For Phase 1 we run the synchronous solver in one shot and
-            // emit a single final progress. Incremental "anytime" updates
-            // are added in Phase 2 (see spec §5.1).
-            let result = Solver.solve(board, profile: profile)
+            let result = Solver.solve(board, profile: profile) { score, expanded in
+                if Task.isCancelled { return }
+                continuation.yield(SolverProgress(
+                    bestScore: score, expandedStates: expanded, isFinal: false))
+            }
             if !Task.isCancelled {
                 continuation.yield(SolverProgress(
                     bestScore: result.score,
