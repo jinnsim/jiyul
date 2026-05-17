@@ -1,30 +1,63 @@
 default_platform(:ios)
 
+# Centralize ASC API key resolution. Values come from fastlane/.env
+# (gitignored). Pass via `app_store_connect_api_key` action and reuse
+# across lanes that talk to ASC.
+def asc_api_key
+  app_store_connect_api_key(
+    key_id: ENV.fetch("APP_STORE_CONNECT_API_KEY_ID"),
+    issuer_id: ENV.fetch("APP_STORE_CONNECT_API_KEY_ISSUER_ID"),
+    key_filepath: ENV.fetch("APP_STORE_CONNECT_API_KEY_PATH"),
+    duration: 1200,
+    in_house: false
+  )
+end
+
 platform :ios do
   desc "Capture App Store screenshots via XCUITest (calls our own script)"
   lane :screenshots do
     sh("../ios/scripts/capture-screenshots.sh")
   end
 
-  desc "Push current metadata + screenshots to App Store Connect (no binary upload)"
+  desc "Push metadata + screenshots to App Store Connect (no binary upload)"
   lane :metadata do
     deliver(
+      api_key: asc_api_key,
       skip_binary_upload: true,
       skip_screenshots: false,
       skip_metadata: false,
       submit_for_review: false,
-      force: true
+      force: true,
+      precheck_include_in_app_purchases: false,
+      run_precheck_before_submit: false
     )
   end
 
   desc "Push only screenshots to App Store Connect"
   lane :upload_screenshots do
     deliver(
+      api_key: asc_api_key,
       skip_binary_upload: true,
       skip_screenshots: false,
       skip_metadata: true,
       submit_for_review: false,
-      force: true
+      force: true,
+      precheck_include_in_app_purchases: false,
+      run_precheck_before_submit: false
+    )
+  end
+
+  desc "Push only metadata (no PNGs) to App Store Connect"
+  lane :upload_metadata do
+    deliver(
+      api_key: asc_api_key,
+      skip_binary_upload: true,
+      skip_screenshots: true,
+      skip_metadata: false,
+      submit_for_review: false,
+      force: true,
+      precheck_include_in_app_purchases: false,
+      run_precheck_before_submit: false
     )
   end
 end

@@ -8,3 +8,4 @@ ios/Tendle.xcodeproj/project.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist
 DerivedData/
 *.xcuserstate
 .DS_Store
+fastlane/.env
