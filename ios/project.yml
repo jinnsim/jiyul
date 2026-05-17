@@ -24,6 +24,7 @@ targets:
       properties:
         CFBundleDisplayName: Jiyul
         CFBundleName: Jiyul
+        ITSAppUsesNonExemptEncryption: false
         UIApplicationSceneManifest:
           UIApplicationSupportsMultipleScenes: false
         UILaunchScreen:
