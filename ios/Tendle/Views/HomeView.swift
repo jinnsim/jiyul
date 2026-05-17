@@ -5,6 +5,7 @@ struct HomeView: View {
     let todayRecord: DailyRecord?
     let onStart: () -> Void
     let onStats: () -> Void
+    let onSettings: () -> Void
     var reopenMoment: EncouragementMoment? = nil
 
     var body: some View {
@@ -41,6 +42,15 @@ struct HomeView: View {
             Spacer()
         }
         .padding()
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    onSettings()
+                } label: {
+                    Image(systemName: "gear")
+                }
+            }
+        }
     }
 
     @ViewBuilder

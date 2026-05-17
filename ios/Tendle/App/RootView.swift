@@ -5,6 +5,7 @@ enum Route: Hashable {
     case game(dateKST: String, sessionID: Double)
     case result(GameSessionSnapshot)
     case stats
+    case settings
 }
 
 /// Hashable, Codable snapshot of the round's terminal state used in
@@ -25,6 +26,7 @@ struct RootView: View {
     @State private var lastFinishedCoordinator: GameCoordinator?
     @AppStorage("lastForegroundAt") private var lastForegroundAt: Double = 0
     @State private var reopenMoment: EncouragementMoment? = nil
+    @State private var currentLocale: Locale = .current
 
     var body: some View {
         NavigationStack(path: $path) {
@@ -34,6 +36,7 @@ struct RootView: View {
                     .record(for: KSTClock.dateString()),
                 onStart: startDaily,
                 onStats: { path.append(Route.stats) },
+                onSettings: { path.append(Route.settings) },
                 reopenMoment: reopenMoment
             )
             .onAppear {
@@ -46,6 +49,7 @@ struct RootView: View {
                 }
                 lastForegroundAt = now
                 finalizePendingBots()
+                refreshLocale()
             }
             .navigationDestination(for: Route.self) { route in
                 switch route {
@@ -68,13 +72,24 @@ struct RootView: View {
                     let store = StatsStore(modelContext: modelContext)
                     let records = (try? store.allRecords()) ?? []
                     StatsView(summary: StatsAggregator.summarize(records: records))
+                case .settings:
+                    SettingsView()
+                        .onDisappear { refreshLocale() }
                 }
             }
         }
+        .environment(\.locale, currentLocale)
     }
 
     private func lang() -> String {
-        Locale.current.language.languageCode?.identifier ?? "ko"
+        let override = (try? SettingsStore(modelContext: modelContext).current().languageOverride)
+        if let override { return override }
+        return Locale.current.language.languageCode?.identifier ?? "ko"
+    }
+
+    private func refreshLocale() {
+        let langOverride = (try? SettingsStore(modelContext: modelContext).current().languageOverride) ?? nil
+        currentLocale = langOverride.flatMap { Locale(identifier: $0) } ?? .current
     }
 
     private func momentFor(snapshot s: GameSessionSnapshot) -> EncouragementMoment {
