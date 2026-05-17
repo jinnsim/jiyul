@@ -105,7 +105,7 @@ Per the plan tail (`docs/superpowers/plans/2026-05-17-tendle-mvp-phase1.md`
   now AVAudioPlayer-backed singleton (`SoundService.shared`), preloaded at
   init, plays `.clear` from `GameCoordinator.commit` on success.
 - **ShareCardRenderer** + ShareLink — pure-function emoji ratio bar per spec
-  §9 (`Tendle YYYY-MM-DD / 🟩 N · 🤖 M (P%) / ████████░░░░`), placed in a
+  §9 (`Jiyul YYYY-MM-DD / 🟩 N · 🤖 M (P%) / ████████░░░░`), placed in a
   bottom `HStack` next to "홈으로" on `ResultView`.
 - **StatsAggregator + StatsView** — `StatsSummary` (totalPlays, bestScore,
   averageScore, currentStreakDays, botWinPercent, 30-day score history),
@@ -152,7 +152,7 @@ Per the plan tail (`docs/superpowers/plans/2026-05-17-tendle-mvp-phase1.md`
 ### What lands next (Phase 3 plan to be written)
 
 - `Localizable.xcstrings` populated for ko/en (system UI strings, button
-  labels, "Tendle" tagline).
+  labels, "Jiyul" tagline).
 - SettingsView with sound on/off + language picker + data reset + playerName edit.
 - iPad-tuned layout: `BoardView` max width 720 pt, cell min 36×36 pt,
   optional `NavigationSplitView` sidebar.

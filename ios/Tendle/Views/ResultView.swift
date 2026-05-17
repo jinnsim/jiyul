@@ -1,15 +1,21 @@
 import SwiftUI
 
 struct ResultView: View {
-    let session: GameSession
-    let onHome: () -> Void
+    let snapshot: GameSessionSnapshot
+    /// Optional live coordinator — when present, the bot score and finality
+    /// stream from `coordinator.session.solverProgress` so a `.pending` result
+    /// upgrades to `.final` in-place. When nil (e.g. revisiting an older
+    /// result), the static `snapshot` values are used.
+    var liveCoordinator: GameCoordinator? = nil
     var encouragementMoment: EncouragementMoment? = nil
+    var streakUpMoment: EncouragementMoment? = nil
+    let onHome: () -> Void
 
     var body: some View {
-        VStack(spacing: 32) {
+        VStack(spacing: 24) {
             Spacer()
             HStack(spacing: 40) {
-                column(label: "당신", value: "\(session.playerScore)", color: .accentColor)
+                column(label: "지율", value: "\(snapshot.playerScore)", color: .accentColor)
                 column(label: "봇", value: botText, color: .secondary)
             }
             if let moment = encouragementMoment {
@@ -21,12 +27,15 @@ struct ResultView: View {
                     .foregroundStyle(.secondary)
                     .padding(.horizontal)
             }
+            if let streakUpMoment {
+                streakBanner(streakUpMoment)
+            }
             Spacer()
             HStack(spacing: 16) {
                 ShareLink(item: ShareCardRenderer.render(
-                    dateKST: session.dateKSTAtStart,
-                    playerScore: session.playerScore,
-                    botScore: session.solverProgress?.isFinal == true ? session.solverProgress?.bestScore : nil))
+                    dateKST: snapshot.dateKST,
+                    playerScore: snapshot.playerScore,
+                    botScore: currentBotScore))
                 {
                     Label("공유", systemImage: "square.and.arrow.up")
                 }
@@ -42,22 +51,46 @@ struct ResultView: View {
         .navigationBarBackButtonHidden(true)
     }
 
-    private var botText: String {
-        if let progress = session.solverProgress, progress.isFinal {
-            return "\(progress.bestScore)"
+    /// Live bot score if coordinator is producing it; otherwise snapshot fallback.
+    private var currentBotScore: Int? {
+        if let live = liveCoordinator?.session.solverProgress, live.isFinal {
+            return live.bestScore
         }
+        return snapshot.botIsFinal ? snapshot.botScore : nil
+    }
+
+    private var botText: String {
+        if let live = liveCoordinator?.session.solverProgress {
+            return live.isFinal ? "\(live.bestScore)" : "…"
+        }
+        if snapshot.botIsFinal, let score = snapshot.botScore { return "\(score)" }
         return "…"
     }
 
     private var microcopy: String {
-        guard let progress = session.solverProgress, progress.isFinal else {
-            return "봇이 아직 계산 중이에요."
-        }
-        switch session.playerScore - progress.bestScore {
+        guard let score = currentBotScore else { return "봇이 아직 계산 중이에요." }
+        switch snapshot.playerScore - score {
         case let d where d > 0: return "봇을 이겼어요!"
         case 0: return "봇과 동점!"
         default: return "다음엔 분명 이길 거예요."
         }
+    }
+
+    @ViewBuilder
+    private func streakBanner(_ moment: EncouragementMoment) -> some View {
+        VStack(spacing: 8) {
+            Image("StreakMilestone")
+                .resizable()
+                .scaledToFit()
+                .frame(maxHeight: 140)
+                .accessibilityHidden(true)
+            Text(moment.line)
+                .font(.headline)
+                .multilineTextAlignment(.center)
+        }
+        .padding(16)
+        .background(Color(.systemGray6), in: RoundedRectangle(cornerRadius: 16))
+        .padding(.horizontal)
     }
 
     private func column(label: String, value: String, color: Color) -> some View {

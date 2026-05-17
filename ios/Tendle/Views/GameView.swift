@@ -4,9 +4,9 @@ struct GameView: View {
     @State var coordinator: GameCoordinator
     @State private var dragStart: CGPoint?
     @State private var dragCurrent: CGPoint?
-    @State private var boardSize: CGSize = .zero
     @State private var lastTick: Date = .now
     @State private var showLoading = true
+    @State private var didFinish = false
 
     private let onFinish: (GameSession) -> Void
 
@@ -34,7 +34,8 @@ struct GameView: View {
             let deltaMs = Int(now.timeIntervalSince(lastTick) * 1000)
             lastTick = now
             coordinator.tick(deltaMs: deltaMs)
-            if coordinator.session.phase == .ended {
+            if coordinator.session.phase == .ended, !didFinish {
+                didFinish = true
                 onFinish(coordinator.session)
             }
         }
@@ -57,25 +58,28 @@ struct GameView: View {
     }
 
     private var hud: some View {
-        HStack(alignment: .center) {
-            VStack(alignment: .leading) {
-                Text("점수").font(.caption).foregroundStyle(.secondary)
-                Text("\(coordinator.session.playerScore)")
-                    .font(.system(size: 34, weight: .bold, design: .rounded))
-            }
-            Spacer()
+        ZStack {
+            // Decorative spider, dead-centered regardless of side label widths.
             Image("GameSpider")
                 .resizable()
                 .scaledToFit()
                 .frame(width: 44, height: 44)
                 .opacity(0.85)
+                .allowsHitTesting(false)
                 .accessibilityHidden(true)
-            Spacer()
-            VStack(alignment: .trailing) {
-                Text("남은 시간").font(.caption).foregroundStyle(.secondary)
-                Text(timeString(coordinator.session.remainingMs))
-                    .font(.system(size: 34, weight: .bold, design: .rounded))
-                    .monospacedDigit()
+            HStack(alignment: .center) {
+                VStack(alignment: .leading) {
+                    Text("점수").font(.caption).foregroundStyle(.secondary)
+                    Text("\(coordinator.session.playerScore)")
+                        .font(.system(size: 34, weight: .bold, design: .rounded))
+                }
+                Spacer()
+                VStack(alignment: .trailing) {
+                    Text("남은 시간").font(.caption).foregroundStyle(.secondary)
+                    Text(timeString(coordinator.session.remainingMs))
+                        .font(.system(size: 34, weight: .bold, design: .rounded))
+                        .monospacedDigit()
+                }
             }
         }
         .padding(.horizontal)
@@ -95,7 +99,8 @@ struct GameView: View {
             )
             let actualW = cellSize * CGFloat(Board.columns)
             let actualH = cellSize * CGFloat(Board.rows)
-            let selection = currentSelection(cellSize: cellSize)
+            let selection = currentSelection(cellSize: cellSize,
+                                             actualW: actualW, actualH: actualH)
 
             ZStack {
                 BoardView(board: coordinator.session.board, highlight: selection, cellSize: cellSize)
@@ -104,15 +109,15 @@ struct GameView: View {
                     .gesture(
                         DragGesture(minimumDistance: 0, coordinateSpace: .named("board"))
                             .onChanged { value in
-                                boardSize = CGSize(width: actualW, height: actualH)
                                 if dragStart == nil { dragStart = value.startLocation }
                                 dragCurrent = value.location
                             }
                             .onEnded { value in
-                                boardSize = CGSize(width: actualW, height: actualH)
                                 if let sel = selectionFrom(start: value.startLocation,
                                                           end: value.location,
-                                                          cellSize: cellSize) {
+                                                          cellSize: cellSize,
+                                                          actualW: actualW,
+                                                          actualH: actualH) {
                                     coordinator.commit(sel)
                                 }
                                 dragStart = nil
@@ -129,15 +134,30 @@ struct GameView: View {
         }
     }
 
-    private func currentSelection(cellSize: CGFloat) -> Selection? {
+    private func currentSelection(cellSize: CGFloat,
+                                  actualW: CGFloat,
+                                  actualH: CGFloat) -> Selection? {
         guard let start = dragStart, let cur = dragCurrent else { return nil }
-        return selectionFrom(start: start, end: cur, cellSize: cellSize)
+        return selectionFrom(start: start, end: cur,
+                             cellSize: cellSize, actualW: actualW, actualH: actualH)
     }
 
-    private func selectionFrom(start: CGPoint, end: CGPoint, cellSize: CGFloat) -> Selection? {
+    /// Maps drag start/end (in board-local coordinate space) to a Selection.
+    /// Policy: reject if the drag *started* outside the board bounds (so taps
+    /// just outside the grid don't snap to the edge). The drag end is clamped
+    /// to the board bounds so users can release outside the board freely.
+    private func selectionFrom(start: CGPoint,
+                                end: CGPoint,
+                                cellSize: CGFloat,
+                                actualW: CGFloat,
+                                actualH: CGFloat) -> Selection? {
         guard cellSize > 0 else { return nil }
+        guard start.x >= 0, start.x < actualW,
+              start.y >= 0, start.y < actualH else { return nil }
+        let cx = max(0, min(actualW - 0.5, end.x))
+        let cy = max(0, min(actualH - 0.5, end.y))
         let c0 = Int(start.x / cellSize); let r0 = Int(start.y / cellSize)
-        let c1 = Int(end.x / cellSize);   let r1 = Int(end.y / cellSize)
+        let c1 = Int(cx / cellSize);      let r1 = Int(cy / cellSize)
         let minC = max(0, min(c0, c1)); let maxC = min(Board.columns - 1, max(c0, c1))
         let minR = max(0, min(r0, r1)); let maxR = min(Board.rows - 1, max(r0, r1))
         guard minC <= maxC && minR <= maxR else { return nil }

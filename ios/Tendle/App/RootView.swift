@@ -7,14 +7,18 @@ enum Route: Hashable {
     case stats
 }
 
-/// Hashable, Codable snapshot of session state at end-of-round used in
-/// NavigationStack path. We can't put the whole GameSession (with Board)
-/// in NavigationPath if Board ever loses Hashable; this keeps things tight.
+/// Hashable, Codable snapshot of the round's terminal state used in
+/// NavigationPath. Captures everything Result needs without holding the
+/// (non-Codable) Board or Coordinator. When the user returns to the round's
+/// Result screen mid-finalization, RootView pairs this snapshot with the
+/// still-live `liveCoordinator` so the bot score can keep updating.
 struct GameSessionSnapshot: Hashable, Codable {
     let dateKST: String
     let playerScore: Int
     let botScore: Int?
     let botIsFinal: Bool
+    let streakDays: Int
+    let isStreakUp: Bool
 }
 
 struct RootView: View {
@@ -56,21 +60,11 @@ struct RootView: View {
                         Text("준비 중…")
                     }
                 case .result(let snapshot):
-                    let streak = (try? StatsStore(modelContext: modelContext).allRecords().count) ?? 0
                     ResultView(
-                        session: GameSession(
-                            board: Board(digits: Array(repeating: 1, count: Board.cellCount)),
-                            phase: .ended,
-                            playerScore: snapshot.playerScore,
-                            remainingMs: 0,
-                            startedAt: .now,
-                            dateKSTAtStart: snapshot.dateKST,
-                            solverProgress: snapshot.botScore.map {
-                                SolverProgress(bestScore: $0, expandedStates: 0,
-                                               isFinal: snapshot.botIsFinal)
-                            }
-                        ),
-                        encouragementMoment: momentFor(snapshot: snapshot, streak: streak)
+                        snapshot: snapshot,
+                        liveCoordinator: liveCoordinator,
+                        encouragementMoment: momentFor(snapshot: snapshot),
+                        streakUpMoment: snapshot.isStreakUp ? streakUpMoment(for: snapshot) : nil
                     ) {
                         path = NavigationPath()
                         liveCoordinator = nil
@@ -88,7 +82,7 @@ struct RootView: View {
         Locale.current.language.languageCode?.identifier ?? "ko"
     }
 
-    private func momentFor(snapshot s: GameSessionSnapshot, streak: Int) -> EncouragementMoment {
+    private func momentFor(snapshot s: GameSessionSnapshot) -> EncouragementMoment {
         let trigger: EncouragementTrigger = {
             guard let bot = s.botScore, s.botIsFinal else { return .roundEndLow }
             if s.playerScore > bot { return .roundEndBeatBot }
@@ -100,26 +94,38 @@ struct RootView: View {
             language: lang(),
             playerName: "지율",
             dateKST: s.dateKST,
-            streak: streak)
+            streak: s.streakDays)
+    }
+
+    private func streakUpMoment(for s: GameSessionSnapshot) -> EncouragementMoment {
+        EncouragementService().line(
+            trigger: .streakUp,
+            language: lang(),
+            playerName: "지율",
+            dateKST: s.dateKST,
+            streak: s.streakDays)
     }
 
     /// Walks any DailyRecord rows whose `botStatus == .pending` and runs the
     /// deterministic solver on their seed in the background. On success,
-    /// upgrades the record to `.final` with the score.
+    /// upgrades the record to `.final` with the score. SwiftData access is
+    /// pinned to the main actor; only scalar dates cross the actor boundary.
     private func finalizePendingBots() {
         let context = modelContext
         Task.detached(priority: .background) {
-            let store = await MainActor.run { StatsStore(modelContext: context) }
-            let pending: [DailyRecord] = await MainActor.run {
-                ((try? store.allRecords()) ?? []).filter { $0.botStatus == .pending }
+            let pendingDates: [String] = await MainActor.run {
+                let store = StatsStore(modelContext: context)
+                return ((try? store.allRecords()) ?? [])
+                    .filter { $0.botStatus == .pending }
+                    .map(\.dateKST)
             }
-            for record in pending {
-                let date = record.dateKSTAtStart
+            for date in pendingDates {
                 let seed = KSTClock.dailySeed(forDate: date)
                 let board = BoardGenerator.generate(seed: seed)
                 let result = Solver.solve(board, profile: .mvpV1)
                 await MainActor.run {
-                    try? store.finalizePendingBot(date: record.dateKST, botScore: result.score)
+                    let store = StatsStore(modelContext: context)
+                    try? store.finalizePendingBot(date: date, botScore: result.score)
                 }
             }
         }
@@ -136,6 +142,8 @@ struct RootView: View {
         let store = StatsStore(modelContext: modelContext)
         let date = session.dateKSTAtStart
         let progress = session.solverProgress
+        let priorRecords = (try? store.allRecords()) ?? []
+        let priorStreak = StatsAggregator.summarize(records: priorRecords).currentStreakDays
         let record = DailyRecord(
             dateKST: date,
             seedInputHash: String(KSTClock.dailySeed(forDate: date), radix: 16),
@@ -150,12 +158,17 @@ struct RootView: View {
             solverProfile: SolverProfile.mvpV1.solverProfile,
             outcome: "completed"
         )
-        _ = try? store.saveFirstAttempt(record)
+        let saved = (try? store.saveFirstAttempt(record)) != nil
+        let postRecords = (try? store.allRecords()) ?? priorRecords
+        let postStreak = StatsAggregator.summarize(records: postRecords).currentStreakDays
+        let isStreakUp = saved && postStreak == priorStreak + 1
         path.append(Route.result(GameSessionSnapshot(
             dateKST: date,
             playerScore: session.playerScore,
             botScore: progress?.bestScore,
-            botIsFinal: progress?.isFinal ?? false
+            botIsFinal: progress?.isFinal ?? false,
+            streakDays: postStreak,
+            isStreakUp: isStreakUp
         )))
     }
 }

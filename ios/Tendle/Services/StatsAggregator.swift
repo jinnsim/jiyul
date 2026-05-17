@@ -24,7 +24,8 @@ enum StatsAggregator {
     }
 
     private static func streakDays(records: [DailyRecord], today: String) -> Int {
-        let set = Set(records.map(\.dateKST))
+        // Only completed attempts count toward streak; abandoned rows are ignored.
+        let set = Set(records.filter { $0.outcome == "completed" }.map(\.dateKST))
         var count = 0
         var cursor = today
         while set.contains(cursor) {

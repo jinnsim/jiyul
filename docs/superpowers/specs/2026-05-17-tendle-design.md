@@ -416,7 +416,7 @@ when the solver changes.
 Wordle-style, plain text. **Emoji ratio bar** (not a board snapshot):
 
 ```
-Tendle 2026-05-17
+Jiyul 2026-05-17
 🟩 87 · 🤖 121 (72%)
 ███████████████░░░░░
 ```
@@ -594,7 +594,7 @@ Until that work is scheduled, the project remains a private build.
 
 ## 17. Open Questions (none blocking implementation)
 
-- Final App Store listing name (Tendle is placeholder; App Store deferred —
+- Final App Store listing name (Jiyul is the working name; App Store deferred —
   see §13.1).
 - `α` final value pending §5.6 spike completion.
 - Whether to expose haptic intensity slider — currently Phase 1.5.
