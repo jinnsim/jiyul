@@ -4,7 +4,7 @@ struct SelectionOverlay: View {
     let sum: Int
 
     var body: some View {
-        Text("합 \(sum)")
+        Text("Selection.Sum \(sum)")
             .font(.system(size: 22, weight: .bold, design: .rounded))
             .padding(.horizontal, 14)
             .padding(.vertical, 8)

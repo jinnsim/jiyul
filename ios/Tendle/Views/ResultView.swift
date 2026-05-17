@@ -15,8 +15,8 @@ struct ResultView: View {
         VStack(spacing: 24) {
             Spacer()
             HStack(spacing: 40) {
-                column(label: "지율", value: "\(snapshot.playerScore)", color: .accentColor)
-                column(label: "봇", value: botText, color: .secondary)
+                column(label: String(localized: "Common.Player"), value: "\(snapshot.playerScore)", color: .accentColor)
+                column(label: String(localized: "Common.Bot"), value: botText, color: .secondary)
             }
             if let moment = encouragementMoment {
                 EncouragementMomentView(moment: moment)
@@ -37,12 +37,12 @@ struct ResultView: View {
                     playerScore: snapshot.playerScore,
                     botScore: currentBotScore))
                 {
-                    Label("공유", systemImage: "square.and.arrow.up")
+                    Label(String(localized: "Result.Share"), systemImage: "square.and.arrow.up")
                 }
                 .buttonStyle(.bordered)
                 .controlSize(.large)
 
-                Button("홈으로", action: onHome)
+                Button(String(localized: "Result.Home"), action: onHome)
                     .buttonStyle(.borderedProminent)
                     .controlSize(.large)
             }
@@ -68,11 +68,13 @@ struct ResultView: View {
     }
 
     private var microcopy: String {
-        guard let score = currentBotScore else { return "봇이 아직 계산 중이에요." }
+        guard let score = currentBotScore else {
+            return String(localized: "Result.BotPending")
+        }
         switch snapshot.playerScore - score {
-        case let d where d > 0: return "봇을 이겼어요!"
-        case 0: return "봇과 동점!"
-        default: return "다음엔 분명 이길 거예요."
+        case let d where d > 0: return String(localized: "Result.Win")
+        case 0: return String(localized: "Result.Tie")
+        default: return String(localized: "Result.Loss")
         }
     }
 

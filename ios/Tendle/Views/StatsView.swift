@@ -6,20 +6,20 @@ struct StatsView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 24) {
-                Text("통계").font(.largeTitle.bold())
+                Text("Stats.Title").font(.largeTitle.bold())
                 HStack(spacing: 24) {
-                    metric("플레이", "\(summary.totalPlays)")
-                    metric("연속", "\(summary.currentStreakDays)")
-                    metric("최고", "\(summary.bestScore)")
-                    metric("봇 승률", "\(summary.botWinPercent)%")
+                    metric(String(localized: "Stats.Plays"), "\(summary.totalPlays)")
+                    metric(String(localized: "Stats.Streak"), "\(summary.currentStreakDays)")
+                    metric(String(localized: "Stats.Best"), "\(summary.bestScore)")
+                    metric(String(localized: "Stats.BotWinRate"), "\(summary.botWinPercent)%")
                 }
-                Text("최근 30일").font(.headline)
+                Text("Stats.Last30").font(.headline)
                 sparkline
                 Spacer()
             }
             .padding()
         }
-        .navigationTitle("통계")
+        .navigationTitle(String(localized: "Stats.Title"))
         .navigationBarTitleDisplayMode(.inline)
     }
 

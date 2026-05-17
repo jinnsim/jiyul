@@ -49,7 +49,7 @@ struct GameView: View {
                         .resizable()
                         .scaledToFit()
                         .frame(maxHeight: 220)
-                    Text("준비 중…")
+                    Text("Game.Loading")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
@@ -71,13 +71,13 @@ struct GameView: View {
                 .accessibilityHidden(true)
             HStack(alignment: .center) {
                 VStack(alignment: .leading) {
-                    Text("점수").font(.caption).foregroundStyle(.secondary)
+                    Text("Game.Score").font(.caption).foregroundStyle(.secondary)
                     Text("\(coordinator.session.playerScore)")
                         .font(.system(size: 34, weight: .bold, design: .rounded))
                 }
                 Spacer()
                 VStack(alignment: .trailing) {
-                    Text("남은 시간").font(.caption).foregroundStyle(.secondary)
+                    Text("Game.TimeLeft").font(.caption).foregroundStyle(.secondary)
                     Text(timeString(coordinator.session.remainingMs))
                         .font(.system(size: 34, weight: .bold, design: .rounded))
                         .monospacedDigit()

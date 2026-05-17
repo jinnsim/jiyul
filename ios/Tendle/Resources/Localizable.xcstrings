@@ -1,0 +1,198 @@
+{
+  "sourceLanguage" : "ko",
+  "strings" : {
+    "Action.Cancel" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Cancel" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "취소" } }
+      }
+    },
+    "Action.Delete" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Delete" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "삭제" } }
+      }
+    },
+    "App.Title" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Jiyul" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "Jiyul" } }
+      }
+    },
+    "Common.Bot" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Bot" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "봇" } }
+      }
+    },
+    "Common.Player" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "You" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "지율" } }
+      }
+    },
+    "Game.Loading" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Loading…" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "준비 중…" } }
+      }
+    },
+    "Game.Score" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Score" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "점수" } }
+      }
+    },
+    "Game.TimeLeft" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Time left" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "남은 시간" } }
+      }
+    },
+    "Home.AlreadyRecorded" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Already recorded" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "이미 기록됨" } }
+      }
+    },
+    "Home.RetryCTA" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Play again" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "다시 도전" } }
+      }
+    },
+    "Home.StartCTA" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Start Today's Board" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "오늘의 보드 시작" } }
+      }
+    },
+    "Home.StatsCTA" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Stats" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "통계 보기" } }
+      }
+    },
+    "Language.System" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Follow system" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "시스템 따름" } }
+      }
+    },
+    "Result.BotPending" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Bot is still thinking." } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "봇이 아직 계산 중이에요." } }
+      }
+    },
+    "Result.Home" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Home" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "홈으로" } }
+      }
+    },
+    "Result.Loss" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Next round is yours." } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "다음엔 분명 이길 거예요." } }
+      }
+    },
+    "Result.Share" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Share" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "공유" } }
+      }
+    },
+    "Result.Tie" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Tied with the bot!" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "봇과 동점!" } }
+      }
+    },
+    "Result.Win" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "You beat the bot!" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "봇을 이겼어요!" } }
+      }
+    },
+    "Selection.Sum %lld" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Sum %lld" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "합 %lld" } }
+      }
+    },
+    "Settings.Language" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Language" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "언어" } }
+      }
+    },
+    "Settings.PlayerName" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Player name" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "플레이어 이름" } }
+      }
+    },
+    "Settings.ResetConfirm" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Delete all records?" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "모든 기록을 삭제할까요?" } }
+      }
+    },
+    "Settings.ResetData" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Reset data" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "데이터 초기화" } }
+      }
+    },
+    "Settings.Sound" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Sound" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "사운드" } }
+      }
+    },
+    "Settings.Title" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Settings" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "설정" } }
+      }
+    },
+    "Stats.Best" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Best" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "최고" } }
+      }
+    },
+    "Stats.BotWinRate" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Bot win %" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "봇 승률" } }
+      }
+    },
+    "Stats.Last30" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Last 30 days" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "최근 30일" } }
+      }
+    },
+    "Stats.Plays" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Plays" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "플레이" } }
+      }
+    },
+    "Stats.Streak" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Streak" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "연속" } }
+      }
+    },
+    "Stats.Title" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Stats" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "통계" } }
+      }
+    }
+  },
+  "version" : "1.0"
+}

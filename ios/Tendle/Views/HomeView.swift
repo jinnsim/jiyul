@@ -10,7 +10,7 @@ struct HomeView: View {
     var body: some View {
         VStack(spacing: 28) {
             Spacer()
-            Text("Jiyul")
+            Text("App.Title")
                 .font(.system(size: 56, weight: .heavy, design: .rounded))
             Text(today)
                 .font(.headline).foregroundStyle(.secondary)
@@ -27,7 +27,7 @@ struct HomeView: View {
                         .frame(maxHeight: 220)
                 }
                 Button(action: onStart) {
-                    Text("오늘의 보드 시작")
+                    Text("Home.StartCTA")
                         .font(.title3.bold())
                         .padding(.horizontal, 24)
                         .padding(.vertical, 14)
@@ -35,7 +35,7 @@ struct HomeView: View {
                 .buttonStyle(.borderedProminent)
                 .controlSize(.large)
             }
-            Button("통계 보기", action: onStats)
+            Button(String(localized: "Home.StatsCTA"), action: onStats)
                 .buttonStyle(.bordered)
                 .controlSize(.regular)
             Spacer()
@@ -46,12 +46,12 @@ struct HomeView: View {
     @ViewBuilder
     private func playedCard(_ record: DailyRecord) -> some View {
         VStack(spacing: 10) {
-            Text("이미 기록됨").font(.caption).foregroundStyle(.secondary)
+            Text("Home.AlreadyRecorded").font(.caption).foregroundStyle(.secondary)
             HStack(spacing: 30) {
-                metric("당신", value: "\(record.playerScore)", color: .accentColor)
-                metric("봇", value: record.botScore.map(String.init) ?? "…", color: .secondary)
+                metric(String(localized: "Common.Player"), value: "\(record.playerScore)", color: .accentColor)
+                metric(String(localized: "Common.Bot"), value: record.botScore.map(String.init) ?? "…", color: .secondary)
             }
-            Button("다시 도전", action: onStart)
+            Button(String(localized: "Home.RetryCTA"), action: onStart)
                 .buttonStyle(.bordered)
                 .controlSize(.regular)
         }
