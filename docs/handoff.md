@@ -253,3 +253,101 @@ Per the plan tail (`docs/superpowers/plans/2026-05-17-tendle-mvp-phase1.md`
 - Anytime solver still single-shot per round; spec §5.1's incremental
   emission is a Phase 4 polish.
 - GameKit leaderboards, push notifications, web companion — not started.
+
+---
+
+## 2026-05-17 — Phase 4 complete (Release-ready) + ASC submission
+
+**Status:** ✅ Phase 4 success criterion met. App is on App Store Connect
+(Apple ID `6770174992`, build 4 + 5).
+
+### Shipped (Phase 4)
+
+- **Apple Developer signing** — Team `LQZYM2U744` wired into
+  `project.yml`. ARCHIVE SUCCEEDED for Release/iOS-device. Local
+  scripts `ios/scripts/build-archive.sh` and `ios/scripts/export-ipa.sh`
+  produce a signed `Jiyul.ipa` (26 MB) for sideload or Transporter
+  upload. Xcode Cloud now owns the production archive path.
+- **Privacy + ASC metadata** —
+  - `docs/privacy.md` — bilingual privacy policy (zero data
+    collection, on-device only).
+  - `docs/app-store-metadata.md` — listing fields ready to paste.
+  - `Info.plist` declares `ITSAppUsesNonExemptEncryption: false`
+    (no custom crypto → exempt from export compliance).
+- **Anytime solver** (`Solver.swift`) — `solve(...)` now accepts an
+  optional `onProgress` callback; `solveAsync` wires it so the live
+  bot score in `ResultView` ticks upward as the beam search finds
+  improvements, then settles to `.isFinal = true` at termination.
+  Existing tests unchanged (no-callback overload still binary-identical).
+- **Xcode Cloud-friendly repo** —
+  - `.gitignore` now excludes only per-developer state; `ios/Tendle.xcodeproj/`
+    is committed so a fresh clone or a Xcode Cloud workspace build
+    succeeds without bootstrap.
+  - `ios/scripts/bootstrap.sh` — first-time setup (`xcodegen` install +
+    project regen). Safety net.
+  - `README.md` — quick-start, architecture pointer, release commands.
+  - `ci_scripts/ci_post_clone.sh` — Xcode Cloud post-clone hook (no-op
+    today; regenerates the project if it ever goes missing).
+  - `TendleTests`/`TendleUITests` targets explicitly disable code
+    signing (simulator-only) so test runs on CI / Xcode Cloud don't
+    require a real-device cert for the test bundle.
+- **Screenshot automation** —
+  - `ios/TendleUITests/CaptureScreenshots.swift` — 5 screens via
+    `accessibilityIdentifier`/`accessibilityLabel`. Uses
+    `-UITEST_FAST_TIMER` launch arg to compress `GameSession.totalDurationMs`
+    from 120s to 5s so the Result test reaches the end-of-round screen
+    within the test timeout (`totalDurationMs` is now a computed
+    property reading `ProcessInfo`).
+  - `ios/scripts/capture-screenshots.sh` — iterates 2 langs × 2 devices
+    (iPhone 15 Pro Max 6.7" + iPad Pro 12.9" 6th-gen), sets
+    `-AppleLanguages`/`-AppleLocale` via `SIMCTL_CHILD_` env, pulls
+    PNGs out of the simulator data container into
+    `fastlane/screenshots/{lang}/{device}-NN-screen.png`.
+  - **20/20 screenshots saved** (5 screens × 2 langs × 2 devices) —
+    ready to upload.
+- **fastlane layout** —
+  - `fastlane/metadata/{ko-KR,en-US}/` — `name`, `subtitle`,
+    `description`, `keywords`, `promotional_text`, `support_url`,
+    `marketing_url`, `privacy_url` (8 files × 2 langs).
+  - `fastlane/Fastfile` — three lanes: `screenshots` (recapture),
+    `metadata` (sync everything to ASC, skip binary), `upload_screenshots`
+    (PNGs only).
+  - `fastlane/Deliverfile` — `app_identifier`, `team_id`, `languages`
+    pinned; `skip_binary_upload: true` (Xcode Cloud owns the build).
+- **iPad orientations fix** — added `UIInterfaceOrientationPortraitUpsideDown`
+  to `UISupportedInterfaceOrientations~ipad` to resolve App Store
+  bundle validation error **ITMS-90474** (iPad multitasking requires
+  all four orientations). Future Xcode Cloud builds will pass the
+  validator.
+
+### Test counts after Phase 4
+
+- **38/39** unit tests pass (slow Solver determinism skipped routinely).
+- **5/5** XCUITest captures per locale × device.
+
+### How to ship from here
+
+```bash
+# 1. Refresh screenshots (if any UI changed):
+./ios/scripts/capture-screenshots.sh
+# or:
+fastlane screenshots
+
+# 2. Push metadata + screenshots to App Store Connect (auth required):
+fastlane metadata        # everything
+fastlane upload_screenshots  # PNGs only
+
+# 3. Xcode Cloud: every push to main triggers an archive workflow
+#    (configure in ASC → Apps → Jiyul → Xcode Cloud). After workflow
+#    succeeds, the build appears in TestFlight automatically.
+
+# 4. When ready for review: ASC UI → Submit for Review (or set
+#    `submit_for_review: true` in fastlane/Fastfile metadata lane).
+```
+
+### Known limitations after Phase 4 (Phase 5+ wishlist)
+
+- Custom-designed `.caf` sounds still deferred.
+- iPad `NavigationSplitView` sidebar.
+- GameKit leaderboards / push notifications.
+- Apple Watch / Vision companion (out of scope for Jiyul's family build).
