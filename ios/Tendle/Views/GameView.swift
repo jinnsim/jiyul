@@ -1,17 +1,20 @@
 import SwiftUI
 
 struct GameView: View {
-    @State var coordinator: GameCoordinator
+    let dateKST: String
+    @State private var coordinator: GameCoordinator
     @State private var dragStart: CGPoint?
     @State private var dragCurrent: CGPoint?
     @State private var lastTick: Date = .now
     @State private var showLoading = true
     @State private var didFinish = false
 
-    private let onFinish: (GameSession) -> Void
+    private let onFinish: (GameCoordinator) -> Void
 
-    init(coordinator: GameCoordinator, onFinish: @escaping (GameSession) -> Void) {
-        self._coordinator = State(initialValue: coordinator)
+    init(dateKST: String, onFinish: @escaping (GameCoordinator) -> Void) {
+        self.dateKST = dateKST
+        let session = GameSession.newDaily(dateKST: dateKST, now: .now)
+        self._coordinator = State(initialValue: GameCoordinator(session: session))
         self.onFinish = onFinish
     }
 
@@ -36,7 +39,7 @@ struct GameView: View {
             coordinator.tick(deltaMs: deltaMs)
             if coordinator.session.phase == .ended, !didFinish {
                 didFinish = true
-                onFinish(coordinator.session)
+                onFinish(coordinator)
             }
         }
         .overlay(alignment: .center) {
@@ -59,7 +62,6 @@ struct GameView: View {
 
     private var hud: some View {
         ZStack {
-            // Decorative spider, dead-centered regardless of side label widths.
             Image("GameSpider")
                 .resizable()
                 .scaledToFit()
@@ -142,10 +144,6 @@ struct GameView: View {
                              cellSize: cellSize, actualW: actualW, actualH: actualH)
     }
 
-    /// Maps drag start/end (in board-local coordinate space) to a Selection.
-    /// Policy: reject if the drag *started* outside the board bounds (so taps
-    /// just outside the grid don't snap to the edge). The drag end is clamped
-    /// to the board bounds so users can release outside the board freely.
     private func selectionFrom(start: CGPoint,
                                 end: CGPoint,
                                 cellSize: CGFloat,

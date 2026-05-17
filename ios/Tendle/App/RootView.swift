@@ -2,16 +2,14 @@ import SwiftUI
 import SwiftData
 
 enum Route: Hashable {
-    case game(dateKST: String)
+    case game(dateKST: String, sessionID: Double)
     case result(GameSessionSnapshot)
     case stats
 }
 
 /// Hashable, Codable snapshot of the round's terminal state used in
 /// NavigationPath. Captures everything Result needs without holding the
-/// (non-Codable) Board or Coordinator. When the user returns to the round's
-/// Result screen mid-finalization, RootView pairs this snapshot with the
-/// still-live `liveCoordinator` so the bot score can keep updating.
+/// (non-Codable) Board or Coordinator.
 struct GameSessionSnapshot: Hashable, Codable {
     let dateKST: String
     let playerScore: Int
@@ -24,7 +22,7 @@ struct GameSessionSnapshot: Hashable, Codable {
 struct RootView: View {
     @Environment(\.modelContext) private var modelContext
     @State private var path = NavigationPath()
-    @State private var liveCoordinator: GameCoordinator?
+    @State private var lastFinishedCoordinator: GameCoordinator?
     @AppStorage("lastForegroundAt") private var lastForegroundAt: Double = 0
     @State private var reopenMoment: EncouragementMoment? = nil
 
@@ -51,23 +49,20 @@ struct RootView: View {
             }
             .navigationDestination(for: Route.self) { route in
                 switch route {
-                case .game:
-                    if let liveCoordinator {
-                        GameView(coordinator: liveCoordinator) { session in
-                            handleFinish(session)
-                        }
-                    } else {
-                        Text("준비 중…")
+                case let .game(dateKST, sessionID):
+                    GameView(dateKST: dateKST) { coordinator in
+                        handleFinish(coordinator: coordinator)
                     }
+                    .id(sessionID)  // forces a fresh view per session
                 case .result(let snapshot):
                     ResultView(
                         snapshot: snapshot,
-                        liveCoordinator: liveCoordinator,
+                        liveCoordinator: lastFinishedCoordinator,
                         encouragementMoment: momentFor(snapshot: snapshot),
                         streakUpMoment: snapshot.isStreakUp ? streakUpMoment(for: snapshot) : nil
                     ) {
                         path = NavigationPath()
-                        liveCoordinator = nil
+                        lastFinishedCoordinator = nil
                     }
                 case .stats:
                     let store = StatsStore(modelContext: modelContext)
@@ -107,9 +102,9 @@ struct RootView: View {
     }
 
     /// Walks any DailyRecord rows whose `botStatus == .pending` and runs the
-    /// deterministic solver on their seed in the background. On success,
-    /// upgrades the record to `.final` with the score. SwiftData access is
-    /// pinned to the main actor; only scalar dates cross the actor boundary.
+    /// deterministic solver on their seed in the background. SwiftData
+    /// access is pinned to the main actor; only scalar dates cross the
+    /// actor boundary.
     private func finalizePendingBots() {
         let context = modelContext
         Task.detached(priority: .background) {
@@ -133,13 +128,16 @@ struct RootView: View {
 
     private func startDaily() {
         let date = KSTClock.dateString()
-        let session = GameSession.newDaily(dateKST: date, now: .now)
-        liveCoordinator = GameCoordinator(session: session)
-        path.append(Route.game(dateKST: date))
+        // Drop any prior in-flight coordinator so its background solver task
+        // is cancelled (GameCoordinator.deinit handles it).
+        lastFinishedCoordinator = nil
+        let sessionID = Date().timeIntervalSince1970
+        path.append(Route.game(dateKST: date, sessionID: sessionID))
     }
 
-    private func handleFinish(_ session: GameSession) {
+    private func handleFinish(coordinator: GameCoordinator) {
         let store = StatsStore(modelContext: modelContext)
+        let session = coordinator.session
         let date = session.dateKSTAtStart
         let progress = session.solverProgress
         let priorRecords = (try? store.allRecords()) ?? []
@@ -162,6 +160,7 @@ struct RootView: View {
         let postRecords = (try? store.allRecords()) ?? priorRecords
         let postStreak = StatsAggregator.summarize(records: postRecords).currentStreakDays
         let isStreakUp = saved && postStreak == priorStreak + 1
+        lastFinishedCoordinator = coordinator
         path.append(Route.result(GameSessionSnapshot(
             dateKST: date,
             playerScore: session.playerScore,
