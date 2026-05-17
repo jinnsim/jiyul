@@ -1,0 +1,17 @@
+title: Jiyul
+description: A calm daily 17×10 sum-to-10 puzzle for iOS
+theme: jekyll-theme-minimal
+url: https://jinnsim.github.io
+baseurl: /jiyul
+
+include:
+  - privacy.md
+  - index.md
+
+exclude:
+  - superpowers
+  - spike-manifests
+  - screenshots
+  - handoff.md
+  - asset-prompts.md
+  - app-store-metadata.md

@@ -1,3 +1,9 @@
+---
+layout: default
+permalink: /privacy
+title: Jiyul — Privacy Policy
+---
+
 # Jiyul — Privacy Policy
 
 **Last updated:** 2026-05-17
