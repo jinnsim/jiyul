@@ -54,3 +54,14 @@ targets:
         buildPhase: resources
     dependencies:
       - target: Tendle
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.jinnsim.Tendle.tests
+        # Test bundles run in the Simulator under the host app's signature.
+        # No need for our Apple Development cert; let xcodebuild use the
+        # ad-hoc simulator signing path instead of trying to provision a
+        # real-device cert for the test target.
+        CODE_SIGN_STYLE: Automatic
+        CODE_SIGN_IDENTITY: "-"
+        CODE_SIGNING_REQUIRED: NO
+        CODE_SIGNING_ALLOWED: NO

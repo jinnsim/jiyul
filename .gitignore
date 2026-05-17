@@ -1,3 +1,10 @@
 assets/discarded/
-ios/Tendle.xcodeproj/
 ios/build/
+build/
+# Xcode user-specific state (per-developer, not project structure)
+ios/Tendle.xcodeproj/xcuserdata/
+ios/Tendle.xcodeproj/project.xcworkspace/xcuserdata/
+ios/Tendle.xcodeproj/project.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist
+DerivedData/
+*.xcuserstate
+.DS_Store

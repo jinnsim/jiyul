@@ -1,0 +1,693 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 54;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0F6F13DDC4A4AFFD3D1C0D68 /* GameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8B8CF32B0DA7511A190D5FE /* GameView.swift */; };
+		110D08A3B45AD2A77F512824 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A612E367A6D583500214C0BD /* HomeView.swift */; };
+		173FD113CE0AB9B365B13376 /* BoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 667858047EA1208D2C47C189 /* BoardView.swift */; };
+		18B29CD7B36A18D195B1A962 /* SettingsStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5610049509308B9D9C9661B4 /* SettingsStoreTests.swift */; };
+		1D3D0C6341BA55ABC96E11DC /* StatsAggregator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D48E2EEDAD7CE1CBAE5E5016 /* StatsAggregator.swift */; };
+		1D49EB2C3A9C0470A628BC78 /* TendleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06006735FEF8B00C72DEC862 /* TendleApp.swift */; };
+		21479AD7360867732141AA09 /* BoardEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8287DDD7B476B83420C7A30 /* BoardEngineTests.swift */; };
+		237158E0E390358C97699C0A /* GameSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EABC335FFE58C094508A85D /* GameSession.swift */; };
+		2FF5391B5E5DBB0AC865DB2E /* Board.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87D5A44F3469F748CAE1FAB8 /* Board.swift */; };
+		35CCD2AF77910940C73EAF15 /* Encouragement.json in Resources */ = {isa = PBXBuildFile; fileRef = A0D828ABD368897B67AA2500 /* Encouragement.json */; };
+		3891D732160DD61F7570DE25 /* AppLanguage.swift in Sources */ = {isa = PBXBuildFile; fileRef = F281F9887F407802C61021A0 /* AppLanguage.swift */; };
+		3FA0474C3588A1CB70884013 /* KSTClock.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA6D3EC342EE73A2031A3AA1 /* KSTClock.swift */; };
+		4145DED865A42F8576DD31E5 /* SolverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36BE074CAAAD8029918C4A31 /* SolverTests.swift */; };
+		45918922D80EA657FF6E9FAF /* KSTClockTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10BF27D3ED84D94344645B48 /* KSTClockTests.swift */; };
+		4899344EEDE60B0707AB2220 /* GameCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E1D59459D4A7552A7D60E6 /* GameCoordinatorTests.swift */; };
+		4ADDF26997E98E20B743F1A8 /* SolverCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F370D5B9058B0E24FC6A5F0 /* SolverCache.swift */; };
+		52192F65BE0EFF180A788D35 /* EncouragementMomentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4665F396063F3879B5AF4DE /* EncouragementMomentView.swift */; };
+		5F4D77E2720E366D0C1063EB /* ShareCardImageRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B6E8DD6FE56D5BDED26CF4B /* ShareCardImageRenderer.swift */; };
+		60C573B4DCBDB7DB2C3B1A8E /* ResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C298C7039EA48BF11F06A2DB /* ResultView.swift */; };
+		66A5B789A4974CC61D343189 /* Smoke.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF032827CF3485908B5022A6 /* Smoke.swift */; };
+		6BE3BAFAF1E7E42FA8026A09 /* AbandonmentMonitorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88B615879F24F4CAFEF36AB7 /* AbandonmentMonitorTests.swift */; };
+		6CB1846DCB5B85CB4D1070E8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42E18703E09080BF4AFEBB7F /* Assets.xcassets */; };
+		73B1FDA8B8A89022E4F30C67 /* EncouragementTrigger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B582B686F98DC88139B95A9 /* EncouragementTrigger.swift */; };
+		7B3D1A6DFE0237FC57266B69 /* BotStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA38C4537E3F11279939251B /* BotStatus.swift */; };
+		7DA49840D964321841592F80 /* SoundService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CAEB7974DA4A5211B137166 /* SoundService.swift */; };
+		7EDEF3A45394CDE851ABA6B2 /* ShareCardRendererTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9536A14413EB16F0BE042CC6 /* ShareCardRendererTests.swift */; };
+		80073E275680ACA960659CD2 /* gameover.caf in Resources */ = {isa = PBXBuildFile; fileRef = B337BD006E4B4409162B5938 /* gameover.caf */; };
+		81FF00F799C265E06F5F22D0 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77CBD8C283B88C4403A64BA2 /* SplashView.swift */; };
+		82F3421E0BD3B71824FF87E1 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = B015CE04B684E2B4C8E8207B /* Localizable.xcstrings */; };
+		890C84940DEF5123523BCACF /* tap.caf in Resources */ = {isa = PBXBuildFile; fileRef = 4D7B3FF67BD70C99DDEB4211 /* tap.caf */; };
+		8A764E81A4A40962BABA2206 /* SelectionOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97E15D0F1D748C51ABFCE2E7 /* SelectionOverlay.swift */; };
+		8FB8C4FD8531F0ECD7D082FF /* Selection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F1AC5D68E69A4F4DF288DD2 /* Selection.swift */; };
+		967809CBAC23C9EB5CD63EFF /* SolverProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADDF2407F0EE22DB4D3EBDFA /* SolverProgress.swift */; };
+		97A16DC963F00C8F02892630 /* clear.caf in Resources */ = {isa = PBXBuildFile; fileRef = ECDC1B7267DB421EC21968C3 /* clear.caf */; };
+		98940BBCFCFDD69ACC76919E /* BoardEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E10F49DAF170504159AD17 /* BoardEngine.swift */; };
+		9C941FE8F69EFB9A0BED1121 /* SettingsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E80077B3DA4CB5A73EC1F85 /* SettingsStore.swift */; };
+		9DFA7A1AA4CB5E7F2173EE99 /* AbandonmentMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F7460BD541008AB91A56C8C /* AbandonmentMonitor.swift */; };
+		A15A47D6F3E3A45C1A27C08A /* SeededRNG.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63B593407E33D9AE2553E2D /* SeededRNG.swift */; };
+		AC2EE90597B67265E6B266B2 /* ShareCardRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DDCC9266A5E41F009B71D8A /* ShareCardRenderer.swift */; };
+		ACB3D4C3CF156EF2389F76AF /* BoardGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ABE35E51D446F47B644B8EE /* BoardGenerator.swift */; };
+		ADDD9D704CDAE958429ECFFA /* StatsAggregatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC8EF397EAC85D9BCF38ECF1 /* StatsAggregatorTests.swift */; };
+		AE5037F53639B777BDBFD0F2 /* EncouragementServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA91010B61E15E948E01CA7E /* EncouragementServiceTests.swift */; };
+		B4C6B069B95DCA9F3FE2BC83 /* EncouragementService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95028E6BF5C35D03B6572AA1 /* EncouragementService.swift */; };
+		B5B660D089F85DE148E39F83 /* EncouragementMoment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C37F313C9D9CB5AE0E5E505 /* EncouragementMoment.swift */; };
+		BE1246001B4072921C9D1C42 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD008A9F6037D713A67D50E2 /* SettingsView.swift */; };
+		C8B28118D5427FAC6EA01AE3 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCD591BA3FDBFFB24A2E7D73 /* RootView.swift */; };
+		CF9560F35A8E889EE9E2BEDD /* StatsStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4235ED2661B90C27E74A62BC /* StatsStoreTests.swift */; };
+		D2497ACF4A765DA3D92A4494 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF3C4F9FE5FF79DC597AF47F /* Settings.swift */; };
+		D3F98550B335ADB27BF3B45D /* StatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8788ECAB0C6434698AEF915 /* StatsView.swift */; };
+		D4DA1ACC79A312244B55C99A /* ShareCardImageRendererTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C684D5B74C6D9F87BF67AAAC /* ShareCardImageRendererTests.swift */; };
+		DBAE245BB563691C318483D8 /* BoardGeneratorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EACB41E6ABF32C12D9A6CA2 /* BoardGeneratorTests.swift */; };
+		DBCC9C67185D316706949435 /* GameCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E114663CB5CE5F59B99C5C /* GameCoordinator.swift */; };
+		DBFFCB6D951BA8DF96410DB2 /* StatsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9634328265FC939E69A9D004 /* StatsStore.swift */; };
+		DC9398193B58768046758AE3 /* Solver.swift in Sources */ = {isa = PBXBuildFile; fileRef = E56526F63064337D34DB6F42 /* Solver.swift */; };
+		E8E5F5B112220C5503022B39 /* Encouragement.json in Resources */ = {isa = PBXBuildFile; fileRef = A0D828ABD368897B67AA2500 /* Encouragement.json */; };
+		EBC8FFF4AD9D9041D8D24451 /* SolverProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 024611CA7BF72BBF546983CA /* SolverProfile.swift */; };
+		F225C9368BC7D4D045B0FB76 /* DailyRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBE312BE074D8ADE58D78748 /* DailyRecord.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		8A85A2B246F2B3684F88D8E7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 960DFCA48854CE4CEA153B9B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1BEFB51A9451F7B959384C22;
+			remoteInfo = Tendle;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		024611CA7BF72BBF546983CA /* SolverProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SolverProfile.swift; sourceTree = "<group>"; };
+		05E114663CB5CE5F59B99C5C /* GameCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameCoordinator.swift; sourceTree = "<group>"; };
+		06006735FEF8B00C72DEC862 /* TendleApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TendleApp.swift; sourceTree = "<group>"; };
+		0ABE35E51D446F47B644B8EE /* BoardGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardGenerator.swift; sourceTree = "<group>"; };
+		0C37F313C9D9CB5AE0E5E505 /* EncouragementMoment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncouragementMoment.swift; sourceTree = "<group>"; };
+		0DDCC9266A5E41F009B71D8A /* ShareCardRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareCardRenderer.swift; sourceTree = "<group>"; };
+		0EACB41E6ABF32C12D9A6CA2 /* BoardGeneratorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardGeneratorTests.swift; sourceTree = "<group>"; };
+		10BF27D3ED84D94344645B48 /* KSTClockTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KSTClockTests.swift; sourceTree = "<group>"; };
+		1CAEB7974DA4A5211B137166 /* SoundService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundService.swift; sourceTree = "<group>"; };
+		277EFAD958BB1F8A58E2977C /* TendleTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = TendleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		2EABC335FFE58C094508A85D /* GameSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameSession.swift; sourceTree = "<group>"; };
+		36BE074CAAAD8029918C4A31 /* SolverTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SolverTests.swift; sourceTree = "<group>"; };
+		3F7460BD541008AB91A56C8C /* AbandonmentMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AbandonmentMonitor.swift; sourceTree = "<group>"; };
+		4235ED2661B90C27E74A62BC /* StatsStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsStoreTests.swift; sourceTree = "<group>"; };
+		42E18703E09080BF4AFEBB7F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		4D7B3FF67BD70C99DDEB4211 /* tap.caf */ = {isa = PBXFileReference; path = tap.caf; sourceTree = "<group>"; };
+		4F370D5B9058B0E24FC6A5F0 /* SolverCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SolverCache.swift; sourceTree = "<group>"; };
+		53E10F49DAF170504159AD17 /* BoardEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardEngine.swift; sourceTree = "<group>"; };
+		5610049509308B9D9C9661B4 /* SettingsStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsStoreTests.swift; sourceTree = "<group>"; };
+		667858047EA1208D2C47C189 /* BoardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardView.swift; sourceTree = "<group>"; };
+		696FF8FE76F23129213101AE /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
+		6B582B686F98DC88139B95A9 /* EncouragementTrigger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncouragementTrigger.swift; sourceTree = "<group>"; };
+		6B6E8DD6FE56D5BDED26CF4B /* ShareCardImageRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareCardImageRenderer.swift; sourceTree = "<group>"; };
+		77CBD8C283B88C4403A64BA2 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
+		7F1AC5D68E69A4F4DF288DD2 /* Selection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Selection.swift; sourceTree = "<group>"; };
+		87D5A44F3469F748CAE1FAB8 /* Board.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Board.swift; sourceTree = "<group>"; };
+		88B615879F24F4CAFEF36AB7 /* AbandonmentMonitorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AbandonmentMonitorTests.swift; sourceTree = "<group>"; };
+		94E1D59459D4A7552A7D60E6 /* GameCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameCoordinatorTests.swift; sourceTree = "<group>"; };
+		95028E6BF5C35D03B6572AA1 /* EncouragementService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncouragementService.swift; sourceTree = "<group>"; };
+		9536A14413EB16F0BE042CC6 /* ShareCardRendererTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareCardRendererTests.swift; sourceTree = "<group>"; };
+		9634328265FC939E69A9D004 /* StatsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsStore.swift; sourceTree = "<group>"; };
+		97E15D0F1D748C51ABFCE2E7 /* SelectionOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectionOverlay.swift; sourceTree = "<group>"; };
+		9E80077B3DA4CB5A73EC1F85 /* SettingsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsStore.swift; sourceTree = "<group>"; };
+		A0D828ABD368897B67AA2500 /* Encouragement.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Encouragement.json; sourceTree = "<group>"; };
+		A4665F396063F3879B5AF4DE /* EncouragementMomentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncouragementMomentView.swift; sourceTree = "<group>"; };
+		A612E367A6D583500214C0BD /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		ADDF2407F0EE22DB4D3EBDFA /* SolverProgress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SolverProgress.swift; sourceTree = "<group>"; };
+		B015CE04B684E2B4C8E8207B /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		B337BD006E4B4409162B5938 /* gameover.caf */ = {isa = PBXFileReference; path = gameover.caf; sourceTree = "<group>"; };
+		B8287DDD7B476B83420C7A30 /* BoardEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardEngineTests.swift; sourceTree = "<group>"; };
+		B8788ECAB0C6434698AEF915 /* StatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsView.swift; sourceTree = "<group>"; };
+		B8B8CF32B0DA7511A190D5FE /* GameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameView.swift; sourceTree = "<group>"; };
+		BF3C4F9FE5FF79DC597AF47F /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
+		C298C7039EA48BF11F06A2DB /* ResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultView.swift; sourceTree = "<group>"; };
+		C684D5B74C6D9F87BF67AAAC /* ShareCardImageRendererTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareCardImageRendererTests.swift; sourceTree = "<group>"; };
+		CA6D3EC342EE73A2031A3AA1 /* KSTClock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KSTClock.swift; sourceTree = "<group>"; };
+		CCD591BA3FDBFFB24A2E7D73 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
+		CD008A9F6037D713A67D50E2 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		CF032827CF3485908B5022A6 /* Smoke.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Smoke.swift; sourceTree = "<group>"; };
+		D48E2EEDAD7CE1CBAE5E5016 /* StatsAggregator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsAggregator.swift; sourceTree = "<group>"; };
+		D63B593407E33D9AE2553E2D /* SeededRNG.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeededRNG.swift; sourceTree = "<group>"; };
+		DA91010B61E15E948E01CA7E /* EncouragementServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncouragementServiceTests.swift; sourceTree = "<group>"; };
+		DBE312BE074D8ADE58D78748 /* DailyRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyRecord.swift; sourceTree = "<group>"; };
+		DC8EF397EAC85D9BCF38ECF1 /* StatsAggregatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsAggregatorTests.swift; sourceTree = "<group>"; };
+		E56526F63064337D34DB6F42 /* Solver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Solver.swift; sourceTree = "<group>"; };
+		E95BC05D83AFD74AC8D85C21 /* Tendle.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Tendle.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		ECDC1B7267DB421EC21968C3 /* clear.caf */ = {isa = PBXFileReference; path = clear.caf; sourceTree = "<group>"; };
+		F281F9887F407802C61021A0 /* AppLanguage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLanguage.swift; sourceTree = "<group>"; };
+		F3D14BB509704AF9D49EFE02 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		FA38C4537E3F11279939251B /* BotStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BotStatus.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		0300D7C550ECD885D0336847 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E95BC05D83AFD74AC8D85C21 /* Tendle.app */,
+				277EFAD958BB1F8A58E2977C /* TendleTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		08974AFE5F57BE6A38879BD3 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				42E18703E09080BF4AFEBB7F /* Assets.xcassets */,
+				A0D828ABD368897B67AA2500 /* Encouragement.json */,
+				B015CE04B684E2B4C8E8207B /* Localizable.xcstrings */,
+				EDD49388B03B3EA45BFEC13C /* Sounds */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		5CBFCCE33025898256889B5B /* Tendle */ = {
+			isa = PBXGroup;
+			children = (
+				F3D14BB509704AF9D49EFE02 /* Info.plist */,
+				C56F82143CCCF81758E93477 /* App */,
+				6ABABC72AAB39B19DC55EEC3 /* Models */,
+				08974AFE5F57BE6A38879BD3 /* Resources */,
+				8796DACEB332CDBB457DB35F /* Services */,
+				B477FC2DC6E126ED0B5BC8AA /* Views */,
+			);
+			path = Tendle;
+			sourceTree = "<group>";
+		};
+		6ABABC72AAB39B19DC55EEC3 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				F281F9887F407802C61021A0 /* AppLanguage.swift */,
+				87D5A44F3469F748CAE1FAB8 /* Board.swift */,
+				FA38C4537E3F11279939251B /* BotStatus.swift */,
+				DBE312BE074D8ADE58D78748 /* DailyRecord.swift */,
+				0C37F313C9D9CB5AE0E5E505 /* EncouragementMoment.swift */,
+				6B582B686F98DC88139B95A9 /* EncouragementTrigger.swift */,
+				2EABC335FFE58C094508A85D /* GameSession.swift */,
+				7F1AC5D68E69A4F4DF288DD2 /* Selection.swift */,
+				BF3C4F9FE5FF79DC597AF47F /* Settings.swift */,
+				4F370D5B9058B0E24FC6A5F0 /* SolverCache.swift */,
+				ADDF2407F0EE22DB4D3EBDFA /* SolverProgress.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		8796DACEB332CDBB457DB35F /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				3F7460BD541008AB91A56C8C /* AbandonmentMonitor.swift */,
+				53E10F49DAF170504159AD17 /* BoardEngine.swift */,
+				0ABE35E51D446F47B644B8EE /* BoardGenerator.swift */,
+				95028E6BF5C35D03B6572AA1 /* EncouragementService.swift */,
+				05E114663CB5CE5F59B99C5C /* GameCoordinator.swift */,
+				CA6D3EC342EE73A2031A3AA1 /* KSTClock.swift */,
+				D63B593407E33D9AE2553E2D /* SeededRNG.swift */,
+				9E80077B3DA4CB5A73EC1F85 /* SettingsStore.swift */,
+				6B6E8DD6FE56D5BDED26CF4B /* ShareCardImageRenderer.swift */,
+				0DDCC9266A5E41F009B71D8A /* ShareCardRenderer.swift */,
+				E56526F63064337D34DB6F42 /* Solver.swift */,
+				024611CA7BF72BBF546983CA /* SolverProfile.swift */,
+				1CAEB7974DA4A5211B137166 /* SoundService.swift */,
+				D48E2EEDAD7CE1CBAE5E5016 /* StatsAggregator.swift */,
+				9634328265FC939E69A9D004 /* StatsStore.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		8EB5C846ACEE365E028D7DDE /* TendleTests */ = {
+			isa = PBXGroup;
+			children = (
+				88B615879F24F4CAFEF36AB7 /* AbandonmentMonitorTests.swift */,
+				B8287DDD7B476B83420C7A30 /* BoardEngineTests.swift */,
+				0EACB41E6ABF32C12D9A6CA2 /* BoardGeneratorTests.swift */,
+				DA91010B61E15E948E01CA7E /* EncouragementServiceTests.swift */,
+				94E1D59459D4A7552A7D60E6 /* GameCoordinatorTests.swift */,
+				10BF27D3ED84D94344645B48 /* KSTClockTests.swift */,
+				5610049509308B9D9C9661B4 /* SettingsStoreTests.swift */,
+				C684D5B74C6D9F87BF67AAAC /* ShareCardImageRendererTests.swift */,
+				9536A14413EB16F0BE042CC6 /* ShareCardRendererTests.swift */,
+				CF032827CF3485908B5022A6 /* Smoke.swift */,
+				36BE074CAAAD8029918C4A31 /* SolverTests.swift */,
+				DC8EF397EAC85D9BCF38ECF1 /* StatsAggregatorTests.swift */,
+				4235ED2661B90C27E74A62BC /* StatsStoreTests.swift */,
+			);
+			path = TendleTests;
+			sourceTree = "<group>";
+		};
+		B477FC2DC6E126ED0B5BC8AA /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				667858047EA1208D2C47C189 /* BoardView.swift */,
+				A4665F396063F3879B5AF4DE /* EncouragementMomentView.swift */,
+				B8B8CF32B0DA7511A190D5FE /* GameView.swift */,
+				A612E367A6D583500214C0BD /* HomeView.swift */,
+				C298C7039EA48BF11F06A2DB /* ResultView.swift */,
+				97E15D0F1D748C51ABFCE2E7 /* SelectionOverlay.swift */,
+				CD008A9F6037D713A67D50E2 /* SettingsView.swift */,
+				77CBD8C283B88C4403A64BA2 /* SplashView.swift */,
+				B8788ECAB0C6434698AEF915 /* StatsView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		C56F82143CCCF81758E93477 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				CCD591BA3FDBFFB24A2E7D73 /* RootView.swift */,
+				06006735FEF8B00C72DEC862 /* TendleApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		E5F5BB0E0D582672F0F9A2C8 = {
+			isa = PBXGroup;
+			children = (
+				5CBFCCE33025898256889B5B /* Tendle */,
+				8EB5C846ACEE365E028D7DDE /* TendleTests */,
+				0300D7C550ECD885D0336847 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		EDD49388B03B3EA45BFEC13C /* Sounds */ = {
+			isa = PBXGroup;
+			children = (
+				696FF8FE76F23129213101AE /* .gitkeep */,
+				ECDC1B7267DB421EC21968C3 /* clear.caf */,
+				B337BD006E4B4409162B5938 /* gameover.caf */,
+				4D7B3FF67BD70C99DDEB4211 /* tap.caf */,
+			);
+			path = Sounds;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		1BEFB51A9451F7B959384C22 /* Tendle */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = ADC448F31671C291F353F9E3 /* Build configuration list for PBXNativeTarget "Tendle" */;
+			buildPhases = (
+				7075F1A5A3F5F64AE35A8B20 /* Sources */,
+				90F3A171FEA7FB2DBD803884 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Tendle;
+			productName = Tendle;
+			productReference = E95BC05D83AFD74AC8D85C21 /* Tendle.app */;
+			productType = "com.apple.product-type.application";
+		};
+		2141897BE8880EC0E66BE1BC /* TendleTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F11F866305C5CD1F2E493AC1 /* Build configuration list for PBXNativeTarget "TendleTests" */;
+			buildPhases = (
+				9969F8B32870140F3A9E47C4 /* Sources */,
+				8AFF8E7CBE7BA606BC18F3C2 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				0A320FDCD59154FF3BB82242 /* PBXTargetDependency */,
+			);
+			name = TendleTests;
+			productName = TendleTests;
+			productReference = 277EFAD958BB1F8A58E2977C /* TendleTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		960DFCA48854CE4CEA153B9B /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1520;
+				TargetAttributes = {
+					1BEFB51A9451F7B959384C22 = {
+						DevelopmentTeam = LQZYM2U744;
+						ProvisioningStyle = Automatic;
+					};
+					2141897BE8880EC0E66BE1BC = {
+						DevelopmentTeam = LQZYM2U744;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = BE1E2048BA9CF31B60840E6A /* Build configuration list for PBXProject "Tendle" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+				ko,
+			);
+			mainGroup = E5F5BB0E0D582672F0F9A2C8;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				1BEFB51A9451F7B959384C22 /* Tendle */,
+				2141897BE8880EC0E66BE1BC /* TendleTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		8AFF8E7CBE7BA606BC18F3C2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E8E5F5B112220C5503022B39 /* Encouragement.json in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		90F3A171FEA7FB2DBD803884 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6CB1846DCB5B85CB4D1070E8 /* Assets.xcassets in Resources */,
+				35CCD2AF77910940C73EAF15 /* Encouragement.json in Resources */,
+				82F3421E0BD3B71824FF87E1 /* Localizable.xcstrings in Resources */,
+				97A16DC963F00C8F02892630 /* clear.caf in Resources */,
+				80073E275680ACA960659CD2 /* gameover.caf in Resources */,
+				890C84940DEF5123523BCACF /* tap.caf in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		7075F1A5A3F5F64AE35A8B20 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9DFA7A1AA4CB5E7F2173EE99 /* AbandonmentMonitor.swift in Sources */,
+				3891D732160DD61F7570DE25 /* AppLanguage.swift in Sources */,
+				2FF5391B5E5DBB0AC865DB2E /* Board.swift in Sources */,
+				98940BBCFCFDD69ACC76919E /* BoardEngine.swift in Sources */,
+				ACB3D4C3CF156EF2389F76AF /* BoardGenerator.swift in Sources */,
+				173FD113CE0AB9B365B13376 /* BoardView.swift in Sources */,
+				7B3D1A6DFE0237FC57266B69 /* BotStatus.swift in Sources */,
+				F225C9368BC7D4D045B0FB76 /* DailyRecord.swift in Sources */,
+				B5B660D089F85DE148E39F83 /* EncouragementMoment.swift in Sources */,
+				52192F65BE0EFF180A788D35 /* EncouragementMomentView.swift in Sources */,
+				B4C6B069B95DCA9F3FE2BC83 /* EncouragementService.swift in Sources */,
+				73B1FDA8B8A89022E4F30C67 /* EncouragementTrigger.swift in Sources */,
+				DBCC9C67185D316706949435 /* GameCoordinator.swift in Sources */,
+				237158E0E390358C97699C0A /* GameSession.swift in Sources */,
+				0F6F13DDC4A4AFFD3D1C0D68 /* GameView.swift in Sources */,
+				110D08A3B45AD2A77F512824 /* HomeView.swift in Sources */,
+				3FA0474C3588A1CB70884013 /* KSTClock.swift in Sources */,
+				60C573B4DCBDB7DB2C3B1A8E /* ResultView.swift in Sources */,
+				C8B28118D5427FAC6EA01AE3 /* RootView.swift in Sources */,
+				A15A47D6F3E3A45C1A27C08A /* SeededRNG.swift in Sources */,
+				8FB8C4FD8531F0ECD7D082FF /* Selection.swift in Sources */,
+				8A764E81A4A40962BABA2206 /* SelectionOverlay.swift in Sources */,
+				D2497ACF4A765DA3D92A4494 /* Settings.swift in Sources */,
+				9C941FE8F69EFB9A0BED1121 /* SettingsStore.swift in Sources */,
+				BE1246001B4072921C9D1C42 /* SettingsView.swift in Sources */,
+				5F4D77E2720E366D0C1063EB /* ShareCardImageRenderer.swift in Sources */,
+				AC2EE90597B67265E6B266B2 /* ShareCardRenderer.swift in Sources */,
+				DC9398193B58768046758AE3 /* Solver.swift in Sources */,
+				4ADDF26997E98E20B743F1A8 /* SolverCache.swift in Sources */,
+				EBC8FFF4AD9D9041D8D24451 /* SolverProfile.swift in Sources */,
+				967809CBAC23C9EB5CD63EFF /* SolverProgress.swift in Sources */,
+				7DA49840D964321841592F80 /* SoundService.swift in Sources */,
+				81FF00F799C265E06F5F22D0 /* SplashView.swift in Sources */,
+				1D3D0C6341BA55ABC96E11DC /* StatsAggregator.swift in Sources */,
+				DBFFCB6D951BA8DF96410DB2 /* StatsStore.swift in Sources */,
+				D3F98550B335ADB27BF3B45D /* StatsView.swift in Sources */,
+				1D49EB2C3A9C0470A628BC78 /* TendleApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9969F8B32870140F3A9E47C4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6BE3BAFAF1E7E42FA8026A09 /* AbandonmentMonitorTests.swift in Sources */,
+				21479AD7360867732141AA09 /* BoardEngineTests.swift in Sources */,
+				DBAE245BB563691C318483D8 /* BoardGeneratorTests.swift in Sources */,
+				AE5037F53639B777BDBFD0F2 /* EncouragementServiceTests.swift in Sources */,
+				4899344EEDE60B0707AB2220 /* GameCoordinatorTests.swift in Sources */,
+				45918922D80EA657FF6E9FAF /* KSTClockTests.swift in Sources */,
+				18B29CD7B36A18D195B1A962 /* SettingsStoreTests.swift in Sources */,
+				D4DA1ACC79A312244B55C99A /* ShareCardImageRendererTests.swift in Sources */,
+				7EDEF3A45394CDE851ABA6B2 /* ShareCardRendererTests.swift in Sources */,
+				66A5B789A4974CC61D343189 /* Smoke.swift in Sources */,
+				4145DED865A42F8576DD31E5 /* SolverTests.swift in Sources */,
+				ADDD9D704CDAE958429ECFFA /* StatsAggregatorTests.swift in Sources */,
+				CF9560F35A8E889EE9E2BEDD /* StatsStoreTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		0A320FDCD59154FF3BB82242 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1BEFB51A9451F7B959384C22 /* Tendle */;
+			targetProxy = 8A85A2B246F2B3684F88D8E7 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		687727C018A8124FF8B228E9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGNING_ALLOWED = NO;
+				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.jinnsim.Tendle.tests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Tendle.app/Tendle";
+			};
+			name = Release;
+		};
+		A098B53EF3A5D0E4939CB597 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = Tendle/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jinnsim.Tendle;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		B1CF7235CCE6040C5615D555 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = LQZYM2U744;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.9;
+			};
+			name = Release;
+		};
+		B7309A7AA7949CB8CE48C1E2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = Tendle/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jinnsim.Tendle;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		E4EBAD81A36FF0C1DC7A729C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGNING_ALLOWED = NO;
+				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.jinnsim.Tendle.tests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Tendle.app/Tendle";
+			};
+			name = Debug;
+		};
+		EE0CD96E4EA0A2B088918F80 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = LQZYM2U744;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.9;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		ADC448F31671C291F353F9E3 /* Build configuration list for PBXNativeTarget "Tendle" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B7309A7AA7949CB8CE48C1E2 /* Debug */,
+				A098B53EF3A5D0E4939CB597 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		BE1E2048BA9CF31B60840E6A /* Build configuration list for PBXProject "Tendle" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EE0CD96E4EA0A2B088918F80 /* Debug */,
+				B1CF7235CCE6040C5615D555 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		F11F866305C5CD1F2E493AC1 /* Build configuration list for PBXNativeTarget "TendleTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E4EBAD81A36FF0C1DC7A729C /* Debug */,
+				687727C018A8124FF8B228E9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 960DFCA48854CE4CEA153B9B /* Project object */;
+}
