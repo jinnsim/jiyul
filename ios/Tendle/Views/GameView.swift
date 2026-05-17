@@ -95,10 +95,14 @@ struct GameView: View {
     @ViewBuilder
     private var boardArea: some View {
         GeometryReader { geo in
-            let cellSize = min(
+            // Cap the cell so on iPad we don't stretch to oversized 60pt+ cells
+            // (which feel sparse). 42pt keeps cells finger-friendly at any size.
+            let maxCell: CGFloat = 42
+            let candidate = min(
                 geo.size.width / CGFloat(Board.columns),
                 geo.size.height / CGFloat(Board.rows)
             )
+            let cellSize = min(candidate, maxCell)
             let actualW = cellSize * CGFloat(Board.columns)
             let actualH = cellSize * CGFloat(Board.rows)
             let selection = currentSelection(cellSize: cellSize,

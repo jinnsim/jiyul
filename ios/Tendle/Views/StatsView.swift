@@ -7,20 +7,35 @@ struct StatsView: View {
         ScrollView {
             VStack(spacing: 24) {
                 Text("Stats.Title").font(.largeTitle.bold())
-                HStack(spacing: 24) {
-                    metric(String(localized: "Stats.Plays"), "\(summary.totalPlays)")
-                    metric(String(localized: "Stats.Streak"), "\(summary.currentStreakDays)")
-                    metric(String(localized: "Stats.Best"), "\(summary.bestScore)")
-                    metric(String(localized: "Stats.BotWinRate"), "\(summary.botWinPercent)%")
-                }
+                metricsRow
                 Text("Stats.Last30").font(.headline)
                 sparkline
                 Spacer()
             }
             .padding()
+            .frame(maxWidth: 640)
+            .frame(maxWidth: .infinity)
         }
         .navigationTitle(String(localized: "Stats.Title"))
         .navigationBarTitleDisplayMode(.inline)
+    }
+
+    @ViewBuilder
+    private var metricsRow: some View {
+        ViewThatFits(in: .horizontal) {
+            HStack(spacing: 24) {
+                metric(String(localized: "Stats.Plays"), "\(summary.totalPlays)")
+                metric(String(localized: "Stats.Streak"), "\(summary.currentStreakDays)")
+                metric(String(localized: "Stats.Best"), "\(summary.bestScore)")
+                metric(String(localized: "Stats.BotWinRate"), "\(summary.botWinPercent)%")
+            }
+            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 18) {
+                metric(String(localized: "Stats.Plays"), "\(summary.totalPlays)")
+                metric(String(localized: "Stats.Streak"), "\(summary.currentStreakDays)")
+                metric(String(localized: "Stats.Best"), "\(summary.bestScore)")
+                metric(String(localized: "Stats.BotWinRate"), "\(summary.botWinPercent)%")
+            }
+        }
     }
 
     @ViewBuilder
