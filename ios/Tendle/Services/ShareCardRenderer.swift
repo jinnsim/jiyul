@@ -10,7 +10,7 @@ enum ShareCardRenderer {
         let bar = String(repeating: "█", count: filled) + String(repeating: "░", count: barWidth - filled)
         let botText = botScore.map(String.init) ?? "…"
         return """
-        Tendle \(dateKST)
+        Jiyul \(dateKST)
         🟩 \(playerScore) · 🤖 \(botText) (\(pct)%)
         \(bar)
         """

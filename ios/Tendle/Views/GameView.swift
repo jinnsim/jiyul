@@ -57,12 +57,19 @@ struct GameView: View {
     }
 
     private var hud: some View {
-        HStack {
+        HStack(alignment: .center) {
             VStack(alignment: .leading) {
                 Text("점수").font(.caption).foregroundStyle(.secondary)
                 Text("\(coordinator.session.playerScore)")
                     .font(.system(size: 34, weight: .bold, design: .rounded))
             }
+            Spacer()
+            Image("GameSpider")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 44, height: 44)
+                .opacity(0.85)
+                .accessibilityHidden(true)
             Spacer()
             VStack(alignment: .trailing) {
                 Text("남은 시간").font(.caption).foregroundStyle(.secondary)
@@ -81,48 +88,56 @@ struct GameView: View {
 
     @ViewBuilder
     private var boardArea: some View {
-        let selection = currentSelection
-        ZStack {
-            GeometryReader { geo in
-                BoardView(board: coordinator.session.board, highlight: selection)
+        GeometryReader { geo in
+            let cellSize = min(
+                geo.size.width / CGFloat(Board.columns),
+                geo.size.height / CGFloat(Board.rows)
+            )
+            let actualW = cellSize * CGFloat(Board.columns)
+            let actualH = cellSize * CGFloat(Board.rows)
+            let selection = currentSelection(cellSize: cellSize)
+
+            ZStack {
+                BoardView(board: coordinator.session.board, highlight: selection, cellSize: cellSize)
+                    .frame(width: actualW, height: actualH)
                     .coordinateSpace(name: "board")
                     .gesture(
                         DragGesture(minimumDistance: 0, coordinateSpace: .named("board"))
                             .onChanged { value in
-                                boardSize = geo.size
+                                boardSize = CGSize(width: actualW, height: actualH)
                                 if dragStart == nil { dragStart = value.startLocation }
                                 dragCurrent = value.location
                             }
                             .onEnded { value in
-                                boardSize = geo.size
+                                boardSize = CGSize(width: actualW, height: actualH)
                                 if let sel = selectionFrom(start: value.startLocation,
-                                                          end: value.location) {
+                                                          end: value.location,
+                                                          cellSize: cellSize) {
                                     coordinator.commit(sel)
                                 }
                                 dragStart = nil
                                 dragCurrent = nil
                             }
                     )
+                if let selection {
+                    let sum = BoardEngine.rectangleSum(selection, on: coordinator.session.board)
+                    SelectionOverlay(sum: sum)
+                        .allowsHitTesting(false)
+                }
             }
-            if let selection {
-                let sum = BoardEngine.rectangleSum(selection, on: coordinator.session.board)
-                SelectionOverlay(sum: sum)
-                    .allowsHitTesting(false)
-            }
+            .frame(width: geo.size.width, height: geo.size.height)
         }
     }
 
-    private var currentSelection: Selection? {
-        guard let start = dragStart, let cur = dragCurrent, boardSize != .zero else { return nil }
-        return selectionFrom(start: start, end: cur)
+    private func currentSelection(cellSize: CGFloat) -> Selection? {
+        guard let start = dragStart, let cur = dragCurrent else { return nil }
+        return selectionFrom(start: start, end: cur, cellSize: cellSize)
     }
 
-    private func selectionFrom(start: CGPoint, end: CGPoint) -> Selection? {
-        guard boardSize != .zero else { return nil }
-        let cellW = boardSize.width / CGFloat(Board.columns)
-        let cellH = boardSize.height / CGFloat(Board.rows)
-        let c0 = Int(start.x / cellW); let r0 = Int(start.y / cellH)
-        let c1 = Int(end.x / cellW);   let r1 = Int(end.y / cellH)
+    private func selectionFrom(start: CGPoint, end: CGPoint, cellSize: CGFloat) -> Selection? {
+        guard cellSize > 0 else { return nil }
+        let c0 = Int(start.x / cellSize); let r0 = Int(start.y / cellSize)
+        let c1 = Int(end.x / cellSize);   let r1 = Int(end.y / cellSize)
         let minC = max(0, min(c0, c1)); let maxC = min(Board.columns - 1, max(c0, c1))
         let minR = max(0, min(r0, r1)); let maxR = min(Board.rows - 1, max(r0, r1))
         guard minC <= maxC && minR <= maxR else { return nil }

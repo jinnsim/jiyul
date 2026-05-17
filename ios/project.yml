@@ -22,7 +22,7 @@ targets:
     info:
       path: Tendle/Info.plist
       properties:
-        CFBundleDisplayName: Tendle
+        CFBundleDisplayName: Jiyul
         UIApplicationSceneManifest:
           UIApplicationSupportsMultipleScenes: false
         UILaunchScreen:

@@ -10,7 +10,7 @@ struct HomeView: View {
     var body: some View {
         VStack(spacing: 28) {
             Spacer()
-            Text("Tendle")
+            Text("Jiyul")
                 .font(.system(size: 56, weight: .heavy, design: .rounded))
             Text(today)
                 .font(.headline).foregroundStyle(.secondary)

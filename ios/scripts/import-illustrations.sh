@@ -17,6 +17,7 @@ declare -a MAP=(
   "tendle-result-low-jiyul-eunchan-spider-r01.png:ResultLow"
   "tendle-milestone-streak-jiyul-eunchan-snake-r02.png:StreakMilestone"
   "tendle-welcome-back-jiyul-eunchan-r01.png:WelcomeBack"
+  "tendle-sticker-spider-r01.png:GameSpider"
 )
 
 for entry in "${MAP[@]}"; do
