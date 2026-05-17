@@ -10,8 +10,8 @@ configs:
 settings:
   base:
     SWIFT_VERSION: "5.9"
-    DEVELOPMENT_TEAM: ""
-    CODE_SIGNING_ALLOWED: NO
+    DEVELOPMENT_TEAM: LQZYM2U744
+    CODE_SIGN_STYLE: Automatic
 targets:
   Tendle:
     type: application
@@ -40,6 +40,9 @@ targets:
       base:
         TARGETED_DEVICE_FAMILY: "1,2"   # iPhone + iPad universal
         ENABLE_PREVIEWS: YES
+        PRODUCT_BUNDLE_IDENTIFIER: com.jinnsim.Tendle
+        MARKETING_VERSION: "1.0"
+        CURRENT_PROJECT_VERSION: "1"
   TendleTests:
     type: bundle.unit-test
     platform: iOS
