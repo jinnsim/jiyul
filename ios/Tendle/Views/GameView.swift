@@ -22,7 +22,8 @@ struct GameView: View {
         VStack(spacing: 16) {
             hud
             boardArea
-                .padding(.horizontal)
+                .padding(.horizontal, 24)
+                .padding(.vertical, 8)
         }
         .padding(.vertical)
         .navigationBarBackButtonHidden(true)
@@ -95,9 +96,11 @@ struct GameView: View {
     @ViewBuilder
     private var boardArea: some View {
         GeometryReader { geo in
-            // Cap the cell so on iPad we don't stretch to oversized 60pt+ cells
-            // (which feel sparse). 42pt keeps cells finger-friendly at any size.
-            let maxCell: CGFloat = 42
+            // Cap cell at 38pt: feels finger-friendly without filling the
+            // whole device width (which made edge cells feel like touch
+            // errors on iPhone). Combined with the outer .padding(.horizontal, 24),
+            // this guarantees breathing room on all current iPhone sizes.
+            let maxCell: CGFloat = 38
             let candidate = min(
                 geo.size.width / CGFloat(Board.columns),
                 geo.size.height / CGFloat(Board.rows)

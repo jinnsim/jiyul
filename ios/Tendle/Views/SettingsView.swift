@@ -42,6 +42,16 @@ struct SettingsView: View {
                             self.settings = try? store().current()
                         }
                 }
+                Section(String(localized: "Settings.OtherApps")) {
+                    Link(destination: URL(string: "https://apps.apple.com/app/id6765893581")!) {
+                        HStack {
+                            Text("Nomori").foregroundStyle(.primary)
+                            Spacer()
+                            Image(systemName: "arrow.up.right.square")
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                }
                 Section {
                     Button(role: .destructive) {
                         showResetConfirm = true

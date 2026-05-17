@@ -127,6 +127,12 @@
         "ko" : { "stringUnit" : { "state" : "translated", "value" : "언어" } }
       }
     },
+    "Settings.OtherApps" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "More from us" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "다른 앱" } }
+      }
+    },
     "Settings.PlayerName" : {
       "localizations" : {
         "en" : { "stringUnit" : { "state" : "translated", "value" : "Player name" } },
