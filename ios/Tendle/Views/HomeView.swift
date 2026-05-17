@@ -35,10 +35,12 @@ struct HomeView: View {
                 }
                 .buttonStyle(.borderedProminent)
                 .controlSize(.large)
+                .accessibilityIdentifier("start-button")
             }
             Button(String(localized: "Home.StatsCTA"), action: onStats)
                 .buttonStyle(.bordered)
                 .controlSize(.regular)
+                .accessibilityIdentifier("stats-button")
             Spacer()
         }
         .padding()
@@ -49,6 +51,7 @@ struct HomeView: View {
                 } label: {
                     Image(systemName: "gear")
                 }
+                .accessibilityLabel("Settings")
             }
         }
     }

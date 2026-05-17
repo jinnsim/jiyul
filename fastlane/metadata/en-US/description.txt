@@ -1,0 +1,9 @@
+Jiyul is a calm daily puzzle for one player.
+
+Drag any rectangle on the 17×10 grid of digits 1–9. If the digits in the rectangle add up to exactly 10, they clear and your score goes up by however many cells you cleared. You have two minutes. Same puzzle worldwide, every day, KST midnight.
+
+Every round ships with an "오늘의 봇 점수" — a deterministic in-app solver that runs on the same board and posts its score for the day. Can you beat it?
+
+Jiyul and her friend Eunchan show up across the app, with a friendly mint dragon, a lavender spider, and an apple-green snake. The encouragement copy is bilingual (Korean and English) and addresses "지율" by default — you can change the player name in Settings.
+
+100% offline. No accounts, no ads, no analytics, no tracking. Your records stay on your device.

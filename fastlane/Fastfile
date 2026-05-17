@@ -1,0 +1,30 @@
+default_platform(:ios)
+
+platform :ios do
+  desc "Capture App Store screenshots via XCUITest (calls our own script)"
+  lane :screenshots do
+    sh("../ios/scripts/capture-screenshots.sh")
+  end
+
+  desc "Push current metadata + screenshots to App Store Connect (no binary upload)"
+  lane :metadata do
+    deliver(
+      skip_binary_upload: true,
+      skip_screenshots: false,
+      skip_metadata: false,
+      submit_for_review: false,
+      force: true
+    )
+  end
+
+  desc "Push only screenshots to App Store Connect"
+  lane :upload_screenshots do
+    deliver(
+      skip_binary_upload: true,
+      skip_screenshots: false,
+      skip_metadata: true,
+      submit_for_review: false,
+      force: true
+    )
+  end
+end

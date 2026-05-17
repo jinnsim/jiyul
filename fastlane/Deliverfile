@@ -1,0 +1,19 @@
+app_identifier "com.jinnsim.Tendle"
+team_id "LQZYM2U744"
+
+# Skip binary upload — Xcode Cloud handles the archive/upload.
+# Run `fastlane deliver --skip_binary_upload` to sync metadata +
+# screenshots into App Store Connect.
+skip_binary_upload true
+skip_screenshots false
+skip_metadata false
+
+# Submit for review only when explicitly opted in.
+submit_for_review false
+
+# Match the fastlane-deliver default directory layout.
+screenshots_path "./fastlane/screenshots"
+metadata_path    "./fastlane/metadata"
+
+# Languages we ship.
+languages ["ko", "en-US"]

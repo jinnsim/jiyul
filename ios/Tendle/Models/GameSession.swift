@@ -15,7 +15,12 @@ struct GameSession: Equatable {
     var dateKSTAtStart: String
     var solverProgress: SolverProgress?
 
-    static let totalDurationMs = 120_000
+    /// 120 seconds for a normal round. UI tests can pass
+    /// `-UITEST_FAST_TIMER` as a launch argument to compress the timer
+    /// to 5 seconds so the Result screen is reachable inside a test.
+    static var totalDurationMs: Int {
+        ProcessInfo.processInfo.arguments.contains("-UITEST_FAST_TIMER") ? 5_000 : 120_000
+    }
 
     static func newDaily(dateKST: String, now: Date) -> GameSession {
         let seed = KSTClock.dailySeed(forDate: dateKST)
