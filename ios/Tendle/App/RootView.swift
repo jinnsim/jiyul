@@ -22,11 +22,13 @@ struct GameSessionSnapshot: Hashable, Codable {
 
 struct RootView: View {
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.scenePhase) private var scenePhase
     @State private var path = NavigationPath()
     @State private var lastFinishedCoordinator: GameCoordinator?
     @AppStorage("lastForegroundAt") private var lastForegroundAt: Double = 0
     @State private var reopenMoment: EncouragementMoment? = nil
     @State private var currentLocale: Locale = .current
+    @State private var leftAt: Date?
 
     var body: some View {
         NavigationStack(path: $path) {
@@ -79,6 +81,29 @@ struct RootView: View {
             }
         }
         .environment(\.locale, currentLocale)
+        .onChange(of: scenePhase) { _, newValue in
+            switch newValue {
+            case .background, .inactive:
+                leftAt = Date()
+            case .active:
+                if let leftAt, AbandonmentMonitor.shouldMarkAbandoned(
+                    leftForegroundAt: leftAt, returnedAt: Date()) {
+                    markInProgressAbandoned()
+                }
+                self.leftAt = nil
+            @unknown default:
+                break
+            }
+        }
+    }
+
+    /// No-op in the current placeholder model: the abandoned DailyRecord
+    /// inserted by startDaily() is already present. This hook exists as a
+    /// documented extension point should we need explicit mid-round cleanup.
+    private func markInProgressAbandoned() {
+        // Placeholder records with outcome == "abandoned" were written by
+        // startDaily(). If the round was never finished those rows remain
+        // abandoned permanently. Nothing extra to do here.
     }
 
     private func lang() -> String {
@@ -146,6 +171,25 @@ struct RootView: View {
         // Drop any prior in-flight coordinator so its background solver task
         // is cancelled (GameCoordinator.deinit handles it).
         lastFinishedCoordinator = nil
+        // Persist an "abandoned" placeholder immediately so that if the user
+        // force-quits or backgrounds for >5 min, the attempt is already
+        // recorded as abandoned — no extra bookkeeping needed at termination.
+        let now = Date()
+        let placeholder = DailyRecord(
+            dateKST: date,
+            seedInputHash: String(KSTClock.dailySeed(forDate: date), radix: 16),
+            startedAtKST: now,
+            endedAtKST: now,
+            dateKSTAtStart: date,
+            playerScore: 0,
+            durationMs: 0,
+            botStatus: .pending,
+            botScore: nil,
+            botFinalizedAt: nil,
+            solverProfile: SolverProfile.mvpV1.solverProfile,
+            outcome: "abandoned"
+        )
+        _ = try? StatsStore(modelContext: modelContext).saveFirstAttempt(placeholder)
         let sessionID = Date().timeIntervalSince1970
         path.append(Route.game(dateKST: date, sessionID: sessionID))
     }
@@ -157,24 +201,44 @@ struct RootView: View {
         let progress = session.solverProgress
         let priorRecords = (try? store.allRecords()) ?? []
         let priorStreak = StatsAggregator.summarize(records: priorRecords).currentStreakDays
-        let record = DailyRecord(
-            dateKST: date,
-            seedInputHash: String(KSTClock.dailySeed(forDate: date), radix: 16),
-            startedAtKST: session.startedAt,
-            endedAtKST: .now,
-            dateKSTAtStart: date,
-            playerScore: session.playerScore,
-            durationMs: GameSession.totalDurationMs - session.remainingMs,
-            botStatus: (progress?.isFinal ?? false) ? .final : .pending,
-            botScore: progress?.bestScore,
-            botFinalizedAt: (progress?.isFinal ?? false) ? .now : nil,
-            solverProfile: SolverProfile.mvpV1.solverProfile,
-            outcome: "completed"
-        )
-        let saved = (try? store.saveFirstAttempt(record)) != nil
+
+        // Upgrade path: if an "abandoned" placeholder was written by startDaily(),
+        // mutate it in-place to "completed" rather than inserting a duplicate row.
+        // Fallback: if no placeholder exists (cold-launch edge case), insert fresh.
+        let upgraded: Bool
+        if let existing = try? store.record(for: date), existing.outcome == "abandoned" {
+            existing.endedAtKST = .now
+            existing.playerScore = session.playerScore
+            existing.durationMs = GameSession.totalDurationMs - session.remainingMs
+            existing.botStatus = (progress?.isFinal ?? false) ? .final : .pending
+            existing.botScore = progress?.bestScore
+            existing.botFinalizedAt = (progress?.isFinal ?? false) ? .now : nil
+            existing.outcome = "completed"
+            try? modelContext.save()
+            upgraded = true
+        } else {
+            // Fallback: no abandoned placeholder — insert a fresh completed record.
+            let record = DailyRecord(
+                dateKST: date,
+                seedInputHash: String(KSTClock.dailySeed(forDate: date), radix: 16),
+                startedAtKST: session.startedAt,
+                endedAtKST: .now,
+                dateKSTAtStart: date,
+                playerScore: session.playerScore,
+                durationMs: GameSession.totalDurationMs - session.remainingMs,
+                botStatus: (progress?.isFinal ?? false) ? .final : .pending,
+                botScore: progress?.bestScore,
+                botFinalizedAt: (progress?.isFinal ?? false) ? .now : nil,
+                solverProfile: SolverProfile.mvpV1.solverProfile,
+                outcome: "completed"
+            )
+            upgraded = (try? store.saveFirstAttempt(record)) != nil
+        }
+
+        // Recompute streak from a fresh fetch so it picks up the just-completed date.
         let postRecords = (try? store.allRecords()) ?? priorRecords
         let postStreak = StatsAggregator.summarize(records: postRecords).currentStreakDays
-        let isStreakUp = saved && postStreak == priorStreak + 1
+        let isStreakUp = upgraded && postStreak == priorStreak + 1
         lastFinishedCoordinator = coordinator
         path.append(Route.result(GameSessionSnapshot(
             dateKST: date,
