@@ -1,1 +1,1 @@
-https://jinnsim.github.io/jiyul/privacy
+https://raw.githubusercontent.com/jinnsim/jiyul/main/docs/privacy.md

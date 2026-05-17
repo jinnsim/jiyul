@@ -82,13 +82,9 @@ xcrun altool --upload-app -f build/ipa/Jiyul.ipa -t ios -u <APPLE_ID> -p <APP_PA
 
 Team ID `LQZYM2U744` wired in `project.yml`; automatic signing.
 
-## Privacy site
-
-`docs/` is a Jekyll site that GitHub Pages serves at
-`https://jinnsim.github.io/jiyul/` (privacy at `/privacy`). Pages must
-be enabled once: repo Settings → Pages → Source: `main` branch,
-folder `/docs` → Save. First build takes ~1 min.
-
 ## License
 
-Personal/family project. See [`docs/privacy.md`](docs/privacy.md).
+Personal/family project. Privacy policy is served as raw Markdown
+from GitHub at
+[docs/privacy.md](https://raw.githubusercontent.com/jinnsim/jiyul/main/docs/privacy.md)
+— that URL is the one registered in App Store Connect.
