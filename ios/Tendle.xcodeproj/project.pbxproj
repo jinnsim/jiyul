@@ -38,6 +38,7 @@
 		82F3421E0BD3B71824FF87E1 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = B015CE04B684E2B4C8E8207B /* Localizable.xcstrings */; };
 		890C84940DEF5123523BCACF /* tap.caf in Resources */ = {isa = PBXBuildFile; fileRef = 4D7B3FF67BD70C99DDEB4211 /* tap.caf */; };
 		8A764E81A4A40962BABA2206 /* SelectionOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97E15D0F1D748C51ABFCE2E7 /* SelectionOverlay.swift */; };
+		8BE8D5D17583B31F12C79F8C /* CaptureScreenshots.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F19C6705EBAA42D0784FD39 /* CaptureScreenshots.swift */; };
 		8FB8C4FD8531F0ECD7D082FF /* Selection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F1AC5D68E69A4F4DF288DD2 /* Selection.swift */; };
 		967809CBAC23C9EB5CD63EFF /* SolverProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADDF2407F0EE22DB4D3EBDFA /* SolverProgress.swift */; };
 		97A16DC963F00C8F02892630 /* clear.caf in Resources */ = {isa = PBXBuildFile; fileRef = ECDC1B7267DB421EC21968C3 /* clear.caf */; };
@@ -67,6 +68,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		8936DC16B13BEAA79B93445B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 960DFCA48854CE4CEA153B9B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1BEFB51A9451F7B959384C22;
+			remoteInfo = Tendle;
+		};
 		8A85A2B246F2B3684F88D8E7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 960DFCA48854CE4CEA153B9B /* Project object */;
@@ -92,10 +100,12 @@
 		3F7460BD541008AB91A56C8C /* AbandonmentMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AbandonmentMonitor.swift; sourceTree = "<group>"; };
 		4235ED2661B90C27E74A62BC /* StatsStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsStoreTests.swift; sourceTree = "<group>"; };
 		42E18703E09080BF4AFEBB7F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		491459387842430DC52C5A3B /* TendleUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = TendleUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4D7B3FF67BD70C99DDEB4211 /* tap.caf */ = {isa = PBXFileReference; path = tap.caf; sourceTree = "<group>"; };
 		4F370D5B9058B0E24FC6A5F0 /* SolverCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SolverCache.swift; sourceTree = "<group>"; };
 		53E10F49DAF170504159AD17 /* BoardEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardEngine.swift; sourceTree = "<group>"; };
 		5610049509308B9D9C9661B4 /* SettingsStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsStoreTests.swift; sourceTree = "<group>"; };
+		5F19C6705EBAA42D0784FD39 /* CaptureScreenshots.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureScreenshots.swift; sourceTree = "<group>"; };
 		667858047EA1208D2C47C189 /* BoardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardView.swift; sourceTree = "<group>"; };
 		696FF8FE76F23129213101AE /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
 		6B582B686F98DC88139B95A9 /* EncouragementTrigger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncouragementTrigger.swift; sourceTree = "<group>"; };
@@ -145,6 +155,7 @@
 			children = (
 				E95BC05D83AFD74AC8D85C21 /* Tendle.app */,
 				277EFAD958BB1F8A58E2977C /* TendleTests.xctest */,
+				491459387842430DC52C5A3B /* TendleUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -158,6 +169,14 @@
 				EDD49388B03B3EA45BFEC13C /* Sounds */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		5283318C6D0F7EB9E4A41662 /* TendleUITests */ = {
+			isa = PBXGroup;
+			children = (
+				5F19C6705EBAA42D0784FD39 /* CaptureScreenshots.swift */,
+			);
+			path = TendleUITests;
 			sourceTree = "<group>";
 		};
 		5CBFCCE33025898256889B5B /* Tendle */ = {
@@ -263,6 +282,7 @@
 			children = (
 				5CBFCCE33025898256889B5B /* Tendle */,
 				8EB5C846ACEE365E028D7DDE /* TendleTests */,
+				5283318C6D0F7EB9E4A41662 /* TendleUITests */,
 				0300D7C550ECD885D0336847 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -314,6 +334,22 @@
 			productReference = 277EFAD958BB1F8A58E2977C /* TendleTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		C94B7E5A5C08F2EDFC0E6AD8 /* TendleUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9CAA3099A8A89E0754F99CF1 /* Build configuration list for PBXNativeTarget "TendleUITests" */;
+			buildPhases = (
+				94C39925A4FF088A65787C1B /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				EAAC161D3AF76D011C0F6B3E /* PBXTargetDependency */,
+			);
+			name = TendleUITests;
+			productName = TendleUITests;
+			productReference = 491459387842430DC52C5A3B /* TendleUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -330,6 +366,11 @@
 					2141897BE8880EC0E66BE1BC = {
 						DevelopmentTeam = LQZYM2U744;
 						ProvisioningStyle = Automatic;
+					};
+					C94B7E5A5C08F2EDFC0E6AD8 = {
+						DevelopmentTeam = LQZYM2U744;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 1BEFB51A9451F7B959384C22;
 					};
 				};
 			};
@@ -348,6 +389,7 @@
 			targets = (
 				1BEFB51A9451F7B959384C22 /* Tendle */,
 				2141897BE8880EC0E66BE1BC /* TendleTests */,
+				C94B7E5A5C08F2EDFC0E6AD8 /* TendleUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -421,6 +463,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		94C39925A4FF088A65787C1B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8BE8D5D17583B31F12C79F8C /* CaptureScreenshots.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		9969F8B32870140F3A9E47C4 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -449,9 +499,35 @@
 			target = 1BEFB51A9451F7B959384C22 /* Tendle */;
 			targetProxy = 8A85A2B246F2B3684F88D8E7 /* PBXContainerItemProxy */;
 		};
+		EAAC161D3AF76D011C0F6B3E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1BEFB51A9451F7B959384C22 /* Tendle */;
+			targetProxy = 8936DC16B13BEAA79B93445B /* PBXContainerItemProxy */;
+		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		0D2C4D64C7125685FA777721 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGNING_ALLOWED = NO;
+				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.jinnsim.Tendle.uitests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Tendle;
+			};
+			name = Debug;
+		};
 		687727C018A8124FF8B228E9 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -592,6 +668,27 @@
 			};
 			name = Debug;
 		};
+		E541DB7D3EBABD4EFF843630 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGNING_ALLOWED = NO;
+				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.jinnsim.Tendle.uitests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Tendle;
+			};
+			name = Release;
+		};
 		EE0CD96E4EA0A2B088918F80 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -660,6 +757,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		9CAA3099A8A89E0754F99CF1 /* Build configuration list for PBXNativeTarget "TendleUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0D2C4D64C7125685FA777721 /* Debug */,
+				E541DB7D3EBABD4EFF843630 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
 		ADC448F31671C291F353F9E3 /* Build configuration list for PBXNativeTarget "Tendle" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
