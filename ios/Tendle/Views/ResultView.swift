@@ -11,6 +11,9 @@ struct ResultView: View {
     var streakUpMoment: EncouragementMoment? = nil
     let onHome: () -> Void
 
+    /// Rendered once on first appearance; nil if ImageRenderer fails.
+    @State private var cardURL: URL? = nil
+
     var body: some View {
         VStack(spacing: 24) {
             Spacer()
@@ -32,15 +35,24 @@ struct ResultView: View {
             }
             Spacer()
             HStack(spacing: 16) {
-                ShareLink(item: ShareCardRenderer.render(
-                    dateKST: snapshot.dateKST,
-                    playerScore: snapshot.playerScore,
-                    botScore: currentBotScore))
-                {
-                    Label(String(localized: "Result.Share"), systemImage: "square.and.arrow.up")
+                if let cardURL {
+                    ShareLink(item: cardURL,
+                              preview: SharePreview("Jiyul \(snapshot.dateKST)")) {
+                        Label(String(localized: "Result.Share"), systemImage: "square.and.arrow.up")
+                    }
+                    .buttonStyle(.bordered)
+                    .controlSize(.large)
+                } else {
+                    // Fallback to plain text if ImageRenderer fails or hasn't fired yet
+                    ShareLink(item: ShareCardRenderer.render(
+                        dateKST: snapshot.dateKST,
+                        playerScore: snapshot.playerScore,
+                        botScore: currentBotScore)) {
+                        Label(String(localized: "Result.Share"), systemImage: "square.and.arrow.up")
+                    }
+                    .buttonStyle(.bordered)
+                    .controlSize(.large)
                 }
-                .buttonStyle(.bordered)
-                .controlSize(.large)
 
                 Button(String(localized: "Result.Home"), action: onHome)
                     .buttonStyle(.borderedProminent)
@@ -49,6 +61,14 @@ struct ResultView: View {
         }
         .padding()
         .navigationBarBackButtonHidden(true)
+        .onAppear {
+            if cardURL == nil {
+                cardURL = ShareCardImageRenderer.render(
+                    dateKST: snapshot.dateKST,
+                    playerScore: snapshot.playerScore,
+                    botScore: currentBotScore)
+            }
+        }
     }
 
     /// Live bot score if coordinator is producing it; otherwise snapshot fallback.
