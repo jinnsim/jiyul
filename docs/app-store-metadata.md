@@ -98,7 +98,7 @@ Use `xcrun simctl io booted screenshot path.png` for each.
 ## TestFlight Beta App Description
 
 Family-and-friends beta for Jiyul, a daily 17×10 sum-to-10 puzzle. No
-data collection, fully offline. Feedback welcome: jinnsim@gmail.com.
+data collection, fully offline. Feedback welcome: ootssu@ootssu.com.
 
 ## Review Notes (for App Store reviewer)
 

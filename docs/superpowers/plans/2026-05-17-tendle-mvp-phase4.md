@@ -87,7 +87,7 @@ family. The app:
 - **Reads the device clock** to determine which puzzle is "today's"
   in the Asia/Seoul timezone. No location data is read.
 
-If you have questions, contact: **jinnsim@gmail.com**.
+If you have questions, contact: **ootssu@ootssu.com**.
 
 ## 한국어
 
@@ -104,7 +104,7 @@ If you have questions, contact: **jinnsim@gmail.com**.
 - 오늘의 퍼즐을 정하기 위해 기기 시계를 KST 기준으로 읽습니다. 위치
   정보는 읽지 않습니다.
 
-문의: **jinnsim@gmail.com**
+문의: **ootssu@ootssu.com**
 ```
 
 - [ ] **Step 2: app-store-metadata.md**
@@ -190,7 +190,7 @@ Manual capture from Simulator:
 
 ## TestFlight Beta Description
 Family-and-friends beta for Jiyul, a daily 17×10 sum-to-10 puzzle. No
-data collection, fully offline. Feedback welcome: jinnsim@gmail.com.
+data collection, fully offline. Feedback welcome: ootssu@ootssu.com.
 ```
 
 - [ ] **Step 3: Add privacy Info.plist keys via project.yml**
